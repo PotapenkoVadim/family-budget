@@ -1,3 +1,3 @@
 <template>
-  <main>Family Budget App</main>
+  <div>Family Budget App</div>
 </template>

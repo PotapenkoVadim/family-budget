@@ -1,9 +1,9 @@
 <script setup>
-console.log('Init App');
+import AppLayout from './components/AppLayout.vue';
 </script>
 
 <template>
-  <RouterView />
+  <AppLayout>
+    <RouterView />
+  </AppLayout>
 </template>
-
-<style scoped></style>

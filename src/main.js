@@ -12,6 +12,8 @@ createApp(App)
   .use(router)
   .use(createPinia())
   .use(PrimeVue, {
-    theme: { preset: Aura }
+    theme: {
+      preset: Aura
+    }
   })
   .mount('#app');

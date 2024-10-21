@@ -7,6 +7,14 @@ export default createRouter({
     {
       path: ROUTER_PATHS.path,
       component: () => import('@/views/HomePage.vue')
+    },
+    {
+      path: ROUTER_PATHS.budget,
+      component: () => import('@/views/BudgetPage.vue')
+    },
+    {
+      path: ROUTER_PATHS.total,
+      component: () => import('@/views/TotalPage.vue')
     }
   ]
 });
