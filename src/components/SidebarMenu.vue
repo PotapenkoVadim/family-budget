@@ -69,7 +69,7 @@ const { menuItems } = useNavigationMenu();
 }
 
 .link_active {
-  box-shadow: 0 1px 0 var(--accent);
+  box-shadow: -1px 0 0 var(--accent);
 }
 
 .sign-out-button {
