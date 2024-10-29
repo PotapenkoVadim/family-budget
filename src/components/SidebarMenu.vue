@@ -10,8 +10,18 @@ const items = ref(SIDEBAR_MENU_ITEMS);
   <div class="sidebar-menu">
     <Menu class="menu" :model="items">
       <template #item="{ item, props }">
-        <router-link v-if="item.route" v-slot="{ href, navigate, isActive }" :to="item.route" custom>
-          <a :href="href" v-bind="props.action" @click="navigate" :class="{'link_active': isActive}">
+        <router-link
+          v-if="item.route"
+          v-slot="{ href, navigate, isActive }"
+          :to="item.route"
+          custom
+        >
+          <a
+            :href="href"
+            v-bind="props.action"
+            @click="navigate"
+            :class="{ link_active: isActive }"
+          >
             <span :class="item.icon" />
             <span class="ml-2">{{ item.label }}</span>
           </a>
