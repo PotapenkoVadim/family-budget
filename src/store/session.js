@@ -1,28 +1,41 @@
 import { supabase } from '@/clients/supabase';
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
-export const useSession = defineStore('session', {
-  state: () => ({
-    currentUser: null,
-    error: null,
-    loading: false,
-    test: false
-  }),
-  actions: {
-    async getSession() {
-      this.loading = true;
-      const { data, error } = await supabase.auth.getSession();
+export const useSession = defineStore('session', () => {
+  const currentSession = ref(null);
+  const sessionError = ref(true);
 
-      if (data.session) {
-        this.session = data.session;
-      }
+  const getSession = async () => {
+    const { data, error } = await supabase.auth.getSession();
 
-      if (error) {
-        this.error = error;
-      }
-
-      this.loading = false;
-      this.test = true;
+    if (data.session) {
+      currentSession.value = data.session;
+      sessionError.value = null;
     }
-  }
+
+    if (error) {
+      sessionError.value = error;
+      currentSession.value = null;
+    }
+  };
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      sessionError.value = error;
+      return;
+    }
+
+    currentSession.value = null;
+    sessionError.value = null;
+  };
+
+  return {
+    currentSession,
+    sessionError,
+    getSession,
+    signOut
+  };
 });

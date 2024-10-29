@@ -5,8 +5,8 @@ import { useSession } from './store/session';
 
 const sessionStore = useSession();
 
-onMounted(() => {
-  sessionStore.getSession();
+onMounted(async () => {
+  await sessionStore.getSession();
 });
 </script>
 

@@ -5,9 +5,11 @@
   --font-family: 'Open Sans', sans-serif;
 
   /* COLORS */
-  --main-dark: #181818;
+  --main-dark: var(--surface-900);
   --secondary-dark: #272727;
   --white: #ffffff;
+  --secondary-white: #c2c2c2;
+  --accent: var(--p-primary-400);
 }
 
 *,

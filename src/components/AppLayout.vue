@@ -33,6 +33,8 @@ import SidebarMenu from './SidebarMenu.vue';
   font-size: 1.24rem;
   font-weight: 800;
   text-align: center;
+  cursor: default;
+  color: var(--p-primary-400);
 }
 
 .content {

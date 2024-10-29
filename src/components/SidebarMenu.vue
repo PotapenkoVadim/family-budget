@@ -1,36 +1,51 @@
 <script setup>
-import { SIDEBAR_MENU_ITEMS } from '@/constants';
+import { useNavigationMenu } from '@/hooks/useNavigationMenu';
+import { useSession } from '@/store/session';
+import Button from 'primevue/button';
 import Menu from 'primevue/menu';
-import { ref } from 'vue';
 
-const items = ref(SIDEBAR_MENU_ITEMS);
+const sessionStore = useSession();
+const { menuItems } = useNavigationMenu();
 </script>
 
 <template>
   <div class="sidebar-menu">
-    <Menu class="menu" :model="items">
+    <Menu id="nav" class="menu" :model="menuItems">
       <template #item="{ item, props }">
-        <router-link
-          v-if="item.route"
-          v-slot="{ href, navigate, isActive }"
-          :to="item.route"
-          custom
-        >
-          <a
-            :href="href"
-            v-bind="props.action"
-            @click="navigate"
-            :class="{ link_active: isActive }"
+        <template v-if="item.show">
+          <router-link
+            v-if="item.route"
+            v-slot="{ href, navigate, isActive }"
+            :to="item.route"
+            custom
           >
-            <span :class="item.icon" />
-            <span class="ml-2">{{ item.label }}</span>
-          </a>
-        </router-link>
+            <a
+              :href="href"
+              v-bind="props.action"
+              @click="navigate"
+              :class="{ link: true, link_active: isActive }"
+            >
+              <span :class="item.icon" />
+              <span>{{ item.label }}</span>
+            </a>
+          </router-link>
 
-        <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-          <span :class="item.icon" />
-          <span class="ml-2">{{ item.label }}</span>
-        </a>
+          <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+            <span :class="item.icon" />
+            <span>{{ item.label }}</span>
+          </a>
+        </template>
+      </template>
+
+      <template #end>
+        <Button
+          v-if="Boolean(sessionStore.currentSession)"
+          class="sign-out-button"
+          @click="sessionStore.signOut"
+        >
+          <span class="pi pi-sign-out"></span>
+          <span>Выход</span>
+        </Button>
       </template>
     </Menu>
   </div>
@@ -43,12 +58,22 @@ const items = ref(SIDEBAR_MENU_ITEMS);
 </style>
 
 <style>
-.menu {
-  border: none !important;
-  background-color: inherit !important;
+#nav.menu {
+  border: none;
+  background-color: inherit;
+}
+
+.link:hover {
+  color: var(--secondary-white);
+  transition: 0.2s;
 }
 
 .link_active {
-  box-shadow: 0 1px 0 var(--white);
+  box-shadow: 0 1px 0 var(--accent);
+}
+
+.sign-out-button {
+  margin-top: 24px;
+  width: 100%;
 }
 </style>

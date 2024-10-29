@@ -1,9 +1,9 @@
-import { createMemoryHistory, createRouter } from 'vue-router';
+import { createWebHistory, createRouter } from 'vue-router';
 import { ROUTER_PATHS } from '@/constants';
 import { supabase } from '@/clients/supabase';
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: ROUTER_PATHS.path,
@@ -23,40 +23,32 @@ const router = createRouter({
       path: ROUTER_PATHS.login,
       component: () => import('@/views/LoginPage.vue'),
       mete: { shouldNotAuthorized: true }
+    },
+    {
+      path: ROUTER_PATHS.error,
+      component: () => import('@/views/ErrorPage.vue')
     }
   ]
 });
 
-async function getUser(next) {
+async function checkAuthStrategy(next, meta) {
   const { data, error } = await supabase.auth.getSession();
 
   switch (true) {
     case Boolean(error):
-      next(ROUTER_PATHS.error);
-      break;
+      return next(ROUTER_PATHS.error);
 
-    case data.session === null:
-      next(ROUTER_PATHS.login);
-      break;
+    case data.session === null && meta.shouldAuth:
+      return next(ROUTER_PATHS.login);
+
+    case data.session !== null && meta.shouldNotAuthorized:
+      return next(ROUTER_PATHS.home);
 
     default:
-      next();
+      return next();
   }
 }
 
-router.beforeEach((to, _, next) => {
-  switch (true) {
-    case to.meta.shouldAuth:
-      getUser(next);
-      break;
-
-    case to.meta.shouldNotAuthorized:
-      next(ROUTER_PATHS.home);
-      break;
-
-    default:
-      next();
-  }
-});
+router.beforeEach((to, _, next) => checkAuthStrategy(next, to.meta));
 
 export default router;
