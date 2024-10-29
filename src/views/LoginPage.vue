@@ -1,3 +1,7 @@
+<script setup>
+import PageTitle from '@/components/PageTitle.vue';
+</script>
+
 <template>
-  <div>Login Page</div>
+  <PageTitle>Login Page</PageTitle>
 </template>

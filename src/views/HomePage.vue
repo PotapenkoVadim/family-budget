@@ -1,3 +1,7 @@
+<script setup>
+import PageTitle from '@/components/PageTitle.vue';
+</script>
+
 <template>
-  <div>Family Budget App</div>
+  <PageTitle>Family Budget App</PageTitle>
 </template>

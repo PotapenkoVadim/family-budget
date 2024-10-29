@@ -1,3 +1,7 @@
+<script setup>
+import PageTitle from '@/components/PageTitle.vue';
+</script>
+
 <template>
-  <div>Total Page</div>
+  <PageTitle>Total Page</PageTitle>
 </template>

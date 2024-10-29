@@ -1,3 +1,7 @@
+<script setup>
+import PageTitle from '@/components/PageTitle.vue';
+</script>
+
 <template>
-  <div>Budget Page</div>
+  <PageTitle>Budget Page</PageTitle>
 </template>

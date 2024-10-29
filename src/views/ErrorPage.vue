@@ -1,3 +1,7 @@
+<script setup>
+import PageTitle from '@/components/PageTitle.vue';
+</script>
+
 <template>
-  <div>Error Page</div>
+  <PageTitle>Error Page</PageTitle>
 </template>
