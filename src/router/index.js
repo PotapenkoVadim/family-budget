@@ -22,7 +22,7 @@ const router = createRouter({
     {
       path: ROUTER_PATHS.login,
       component: () => import('@/views/LoginPage.vue'),
-      mete: { shouldNotAuthorized: true }
+      meta: { shouldNotAuthorized: true }
     },
     {
       path: ROUTER_PATHS.error,
@@ -31,17 +31,17 @@ const router = createRouter({
   ]
 });
 
-async function checkAuthStrategy(next, meta) {
+async function checkAuthStrategy(to, _, next) {
   const { data, error } = await supabase.auth.getSession();
 
   switch (true) {
     case Boolean(error):
       return next(ROUTER_PATHS.error);
 
-    case data.session === null && meta.shouldAuth:
+    case data.session === null && to.meta.shouldAuth:
       return next(ROUTER_PATHS.login);
 
-    case data.session !== null && meta.shouldNotAuthorized:
+    case data.session !== null && to.meta.shouldNotAuthorized:
       return next(ROUTER_PATHS.home);
 
     default:
@@ -49,6 +49,6 @@ async function checkAuthStrategy(next, meta) {
   }
 }
 
-router.beforeEach((to, _, next) => checkAuthStrategy(next, to.meta));
+router.beforeEach(checkAuthStrategy);
 
 export default router;

@@ -4,12 +4,12 @@ import SidebarMenu from './SidebarMenu.vue';
 
 <template>
   <div class="layout">
-    <aside class="sidebar">
-      <div class="sidebar__title">Family Budget</div>
+    <aside class="layout__sidebar">
+      <div class="layout__title">Family Budget</div>
       <SidebarMenu />
     </aside>
 
-    <main class="content">
+    <main class="layout__content">
       <slot></slot>
     </main>
   </div>
@@ -23,21 +23,20 @@ import SidebarMenu from './SidebarMenu.vue';
   grid-template-columns: auto 1fr;
 }
 
-.sidebar {
+.layout__sidebar {
   padding: 24px;
   background-color: var(--secondary-dark);
   width: 260px;
 }
 
-.sidebar__title {
+.layout__title {
   font-size: 1.24rem;
   font-weight: 800;
-  text-align: center;
   cursor: default;
   color: var(--p-primary-400);
 }
 
-.content {
+.layout__content {
   padding: 24px;
 }
 
@@ -46,20 +45,20 @@ import SidebarMenu from './SidebarMenu.vue';
     gap: 0;
   }
 
-  .sidebar {
+  .layout__sidebar {
     width: 0;
     padding: 0;
     overflow: hidden;
   }
 
-  .content {
-    padding: 12px;
+  .layout__content {
+    padding: 16px;
   }
 }
 
 @media (max-width: 600px) {
-  .content {
-    padding: 4px;
+  .layout__content {
+    padding: 10px;
   }
 }
 </style>

@@ -4,38 +4,54 @@ import { ref } from 'vue';
 
 export const useSession = defineStore('session', () => {
   const currentSession = ref(null);
-  const sessionError = ref(true);
 
-  const getSession = async () => {
+  async function getSession() {
     const { data, error } = await supabase.auth.getSession();
 
     if (data.session) {
       currentSession.value = data.session;
-      sessionError.value = null;
     }
 
     if (error) {
-      sessionError.value = error;
-      currentSession.value = null;
+      throw new Error(error.message);
     }
-  };
+  }
 
-  const signOut = async () => {
+  async function signOut() {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      sessionError.value = error;
-      return;
+      throw new Error(error.message);
     }
 
     currentSession.value = null;
-    sessionError.value = null;
-  };
+  }
+
+  async function signUp(credentials) {
+    const { error } = await supabase.auth.signUp(credentials);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    await getSession();
+  }
+
+  async function signIn(credentials) {
+    const { error } = await supabase.auth.signInWithPassword(credentials);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    await getSession();
+  }
 
   return {
     currentSession,
-    sessionError,
     getSession,
-    signOut
+    signOut,
+    signUp,
+    signIn
   };
 });

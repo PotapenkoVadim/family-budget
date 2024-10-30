@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import AppLayout from './components/AppLayout.vue';
 import { useSession } from './store/session';
+import Toast from 'primevue/toast';
 
 const sessionStore = useSession();
 
@@ -13,5 +14,6 @@ onMounted(async () => {
 <template>
   <AppLayout>
     <RouterView />
+    <Toast />
   </AppLayout>
 </template>

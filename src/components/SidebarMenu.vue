@@ -1,16 +1,69 @@
 <script setup>
-import { useNavigationMenu } from '@/hooks/useNavigationMenu';
+import { ROUTER_PATHS } from '@/constants';
 import { useSession } from '@/store/session';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
+import { useToast } from 'primevue/usetoast';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const sessionStore = useSession();
-const { menuItems } = useNavigationMenu();
+const router = useRouter();
+const toast = useToast();
+
+const isLoading = ref(false);
+const menuItems = ref([
+  {
+    key: 'home',
+    label: 'Главная',
+    icon: 'pi pi-home',
+    route: ROUTER_PATHS.home,
+    show: true
+  },
+  {
+    key: 'budget',
+    label: 'Повседневные',
+    icon: 'pi pi-calendar',
+    route: ROUTER_PATHS.budget,
+    show: computed(() => !!sessionStore.currentSession)
+  },
+  {
+    key: 'total',
+    label: 'Итого',
+    icon: 'pi pi-briefcase',
+    route: ROUTER_PATHS.total,
+    show: computed(() => !!sessionStore.currentSession)
+  },
+  {
+    key: 'login',
+    label: 'Войти',
+    icon: 'pi pi-user',
+    route: ROUTER_PATHS.login,
+    show: computed(() => !sessionStore.currentSession)
+  }
+]);
+
+const handleSubmit = async () => {
+  isLoading.value = true;
+  try {
+    await sessionStore.signOut();
+    router.push(ROUTER_PATHS.home);
+  } catch (error) {
+    console.warn(error);
+    toast.add({
+      severity: 'error',
+      summary: 'Произошла ошибка! Повторите попытку позже.',
+      life: 3000
+    });
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>
 
 <template>
   <div class="sidebar-menu">
-    <Menu id="nav" class="menu" :model="menuItems">
+    <Menu id="nav" class="sidebar-menu__menu" :model="menuItems">
       <template #item="{ item, props }">
         <template v-if="item.show">
           <router-link
@@ -23,7 +76,10 @@ const { menuItems } = useNavigationMenu();
               :href="href"
               v-bind="props.action"
               @click="navigate"
-              :class="{ link: true, link_active: isActive }"
+              :class="{
+                'sidebar-menu__link': true,
+                'sidebar-menu__link_active': isActive
+              }"
             >
               <span :class="item.icon" />
               <span>{{ item.label }}</span>
@@ -39,13 +95,13 @@ const { menuItems } = useNavigationMenu();
 
       <template #end>
         <Button
-          v-if="Boolean(sessionStore.currentSession)"
-          class="sign-out-button"
-          @click="sessionStore.signOut"
-        >
-          <span class="pi pi-sign-out"></span>
-          <span>Выход</span>
-        </Button>
+          v-if="!!sessionStore.currentSession"
+          class="sidebar-menu__button"
+          @click="handleSubmit"
+          icon="pi pi-sign-out"
+          label="Выход"
+          :loading="isLoading"
+        />
       </template>
     </Menu>
   </div>
@@ -58,21 +114,21 @@ const { menuItems } = useNavigationMenu();
 </style>
 
 <style>
-#nav.menu {
+#nav.sidebar-menu__menu {
   border: none;
   background-color: inherit;
 }
 
-.link:hover {
+.sidebar-menu__link:hover {
   color: var(--secondary-white);
   transition: 0.2s;
 }
 
-.link_active {
+.sidebar-menu__link_active {
   box-shadow: -1px 0 0 var(--accent);
 }
 
-.sign-out-button {
+.sidebar-menu__button {
   margin-top: 24px;
   width: 100%;
 }
