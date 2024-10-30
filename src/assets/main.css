@@ -3,6 +3,13 @@
 :root {
   --font-size: 16px;
   --font-family: 'Open Sans', sans-serif;
+
+  /* COLORS */
+  --main-dark: var(--surface-900);
+  --secondary-dark: #272727;
+  --white: #ffffff;
+  --secondary-white: #c2c2c2;
+  --accent: var(--p-primary-400);
 }
 
 *,
@@ -17,4 +24,6 @@ body {
   -webkit-font-smoothing: antialiased;
   font-size: var(--font-size);
   font-family: var(--font-family);
+  background-color: var(--main-dark);
+  color: var(--white);
 }
