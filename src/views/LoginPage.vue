@@ -1,6 +1,6 @@
 <script setup>
 import PageTitle from '@/components/PageTitle.vue';
-import { ROUTER_PATHS } from '@/constants';
+import { ROUTER_PATHS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useSession } from '@/store/session';
 import Button from 'primevue/button';
 import InputGroup from 'primevue/inputgroup';
@@ -52,7 +52,7 @@ const submit = async () => {
       router.push(ROUTER_PATHS.budget);
     } catch (error) {
       console.warn(error);
-      toast.add({ severity: 'error', summary: 'Ошибка! Неверно введены данные', life: 3000 });
+      toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
     } finally {
       isLoading.value = false;
     }

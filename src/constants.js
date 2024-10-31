@@ -5,3 +5,9 @@ export const ROUTER_PATHS = {
   login: '/login',
   error: '/error'
 };
+
+export const TOAST_DEFAULT_ERROR_MESSAGE = {
+  severity: 'error',
+  summary: 'Произошла ошибка! Повторите попытку позже.',
+  life: 3000
+};

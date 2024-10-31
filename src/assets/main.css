@@ -7,7 +7,7 @@
   /* COLORS */
   --main-dark: var(--surface-900);
   --secondary-dark: #272727;
-  --white: #ffffff;
+  --white: #ddd;
   --secondary-white: #c2c2c2;
   --accent: var(--p-primary-400);
 }
