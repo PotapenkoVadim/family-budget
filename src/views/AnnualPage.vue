@@ -3,5 +3,5 @@ import PageTitle from '@/components/PageTitle.vue';
 </script>
 
 <template>
-  <PageTitle>Budget Page</PageTitle>
+  <PageTitle>Budget Annual Page</PageTitle>
 </template>
