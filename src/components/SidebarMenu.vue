@@ -29,7 +29,7 @@ const menuItems = ref([
   },
   {
     key: 'annual',
-    label: 'Итого',
+    label: 'Годовой бюджет',
     icon: 'pi pi-briefcase',
     route: ROUTER_PATHS.annual,
     show: computed(() => !!sessionStore.currentSession)
