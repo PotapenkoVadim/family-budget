@@ -10,13 +10,13 @@ const router = createRouter({
       component: () => import('@/views/HomePage.vue')
     },
     {
-      path: ROUTER_PATHS.budget,
-      component: () => import('@/views/BudgetPage.vue'),
+      path: ROUTER_PATHS.daily,
+      component: () => import('@/views/DailyPage.vue'),
       meta: { shouldAuth: true }
     },
     {
-      path: ROUTER_PATHS.total,
-      component: () => import('@/views/TotalPage.vue'),
+      path: ROUTER_PATHS.annual,
+      component: () => import('@/views/AnnualPage.vue'),
       meta: { shouldAuth: true }
     },
     {

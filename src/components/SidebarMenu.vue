@@ -21,17 +21,17 @@ const menuItems = ref([
     show: true
   },
   {
-    key: 'budget',
+    key: 'daily',
     label: 'Повседневные',
     icon: 'pi pi-calendar',
-    route: ROUTER_PATHS.budget,
+    route: ROUTER_PATHS.daily,
     show: computed(() => !!sessionStore.currentSession)
   },
   {
-    key: 'total',
+    key: 'annual',
     label: 'Итого',
     icon: 'pi pi-briefcase',
-    route: ROUTER_PATHS.total,
+    route: ROUTER_PATHS.annual,
     show: computed(() => !!sessionStore.currentSession)
   },
   {

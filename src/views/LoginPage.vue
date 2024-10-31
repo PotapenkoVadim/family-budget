@@ -61,7 +61,7 @@ const submit = async () => {
           }
         });
       }
-      router.push(ROUTER_PATHS.budget);
+      router.push(ROUTER_PATHS.daily);
     } catch (error) {
       console.warn(error);
       toast.add(TOAST_DEFAULT_ERROR_MESSAGE);

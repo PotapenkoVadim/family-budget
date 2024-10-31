@@ -1,7 +1,7 @@
 export const ROUTER_PATHS = {
   home: '/',
-  budget: '/budget',
-  total: '/total',
+  daily: '/daily',
+  annual: '/annual',
   login: '/login',
   error: '/error'
 };
