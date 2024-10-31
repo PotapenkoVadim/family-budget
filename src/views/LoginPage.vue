@@ -1,6 +1,6 @@
 <script setup>
 import PageTitle from '@/components/PageTitle.vue';
-import { ROUTER_PATHS } from '@/constants';
+import { DEFAULT_ACCESS_TYPE, ROUTER_PATHS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useSession } from '@/store/session';
 import Button from 'primevue/button';
 import InputGroup from 'primevue/inputgroup';
@@ -17,11 +17,14 @@ const router = useRouter();
 const toast = useToast();
 
 const isLogInVariant = ref(false);
+const isLoading = ref(false);
+
 const email = ref('');
 const isValidEmail = ref(true);
 const password = ref('');
 const isValidPassword = ref(true);
-const isLoading = ref(false);
+const username = ref('');
+const isValidUsername = ref(true);
 
 watch([email, password], () => {
   isValidEmail.value = true;
@@ -31,6 +34,7 @@ watch([email, password], () => {
 const validateCredentials = () => {
   isValidEmail.value = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email.value);
   isValidPassword.value = /^(?=.*\d).{8,}$/g.test(password.value);
+  isValidUsername.value = username.value.length > 0;
 
   return isValidEmail.value && isValidPassword.value;
 };
@@ -47,12 +51,20 @@ const submit = async () => {
       if (isLogInVariant.value) {
         await sessionStore.signIn(credentials);
       } else {
-        await sessionStore.signUp(credentials);
+        await sessionStore.signUp({
+          ...credentials,
+          options: {
+            data: {
+              username: username.value,
+              access_type: DEFAULT_ACCESS_TYPE
+            }
+          }
+        });
       }
       router.push(ROUTER_PATHS.budget);
     } catch (error) {
       console.warn(error);
-      toast.add({ severity: 'error', summary: 'Ошибка! Неверно введены данные', life: 3000 });
+      toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
     } finally {
       isLoading.value = false;
     }
@@ -82,6 +94,23 @@ const authButtonText = computed(() => {
   <PageTitle>{{ titleText }}</PageTitle>
 
   <form class="form" @submit.prevent="submit">
+    <template v-if="!isLogInVariant">
+      <InputGroup>
+        <InputGroupAddon>
+          <span class="pi pi-user"></span>
+        </InputGroupAddon>
+        <InputText
+          type="text"
+          placeholder="Username"
+          v-model="username"
+          :required="true"
+          :invalid="!isValidUsername"
+          :disabled="isLoading"
+        />
+      </InputGroup>
+      <Message v-if="!isValidUsername" severity="error">Обязательное поле</Message>
+    </template>
+
     <InputGroup>
       <InputGroupAddon>
         <span class="pi pi-at"></span>
@@ -95,7 +124,7 @@ const authButtonText = computed(() => {
         :disabled="isLoading"
       />
     </InputGroup>
-    <Message v-if="!isValidEmail" severity="error"> Неверный формат пароля </Message>
+    <Message v-if="!isValidEmail" severity="error">Неверный формат пароля</Message>
 
     <InputGroup>
       <InputGroupAddon>

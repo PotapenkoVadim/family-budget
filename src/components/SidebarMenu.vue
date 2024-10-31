@@ -1,5 +1,5 @@
 <script setup>
-import { ROUTER_PATHS } from '@/constants';
+import { ROUTER_PATHS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useSession } from '@/store/session';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
@@ -50,11 +50,7 @@ const handleSubmit = async () => {
     router.push(ROUTER_PATHS.home);
   } catch (error) {
     console.warn(error);
-    toast.add({
-      severity: 'error',
-      summary: 'Произошла ошибка! Повторите попытку позже.',
-      life: 3000
-    });
+    toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
   } finally {
     isLoading.value = false;
   }
@@ -107,13 +103,11 @@ const handleSubmit = async () => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .sidebar-menu {
   margin-top: 32px;
 }
-</style>
 
-<style>
 #nav.sidebar-menu__menu {
   border: none;
   background-color: inherit;

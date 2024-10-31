@@ -6,6 +6,7 @@
 
 <style scoped>
 .page-title {
+  font-size: 1.45rem;
   color: var(--white);
 }
 </style>
