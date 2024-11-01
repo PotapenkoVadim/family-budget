@@ -1,4 +1,5 @@
 <script setup>
+import BudgetTable from '@/components/BudgetTable.vue';
 import MonthControl from '@/components/MonthControl.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
@@ -49,7 +50,7 @@ watch(monthOffset, async () => {
     <ProgressSpinner />
   </div>
 
-  <div v-else>BUDGET CONTENT</div>
+  <BudgetTable v-else :budgetData="budgetStore.budget" />
 </template>
 
 <style scoped>
