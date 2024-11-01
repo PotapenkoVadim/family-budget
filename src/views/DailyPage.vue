@@ -1,12 +1,15 @@
 <script setup>
 import MonthControl from '@/components/MonthControl.vue';
 import PageTitle from '@/components/PageTitle.vue';
+import { TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
 import { getFirstAndLastDayOfMonth } from '@/utils';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useToast } from 'primevue/usetoast';
 import { onMounted, ref, watch } from 'vue';
 
 const budgetStore = useBudget();
+const toast = useToast();
 
 const monthOffset = ref(0);
 const isLoading = ref(false);
@@ -19,6 +22,7 @@ const getBudget = async (monthOffset) => {
     await budgetStore.getBudget(getFirstAndLastDayOfMonth(monthOffset));
   } catch (error) {
     console.warn(error);
+    toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
   } finally {
     isLoading.value = false;
   }
