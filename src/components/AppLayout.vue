@@ -17,7 +17,7 @@ const isOpenMobileMenu = ref(false);
     <aside :class="{ layout__sidebar: true, layout__sidebar_open: isOpenMobileMenu }">
       <div class="layout__title">Family Budget</div>
       <MenuSkeleton v-if="props.isLoading" />
-      <SidebarMenu v-else />
+      <SidebarMenu v-else @afterNavigate="isOpenMobileMenu = false" />
     </aside>
 
     <main class="layout__content">
