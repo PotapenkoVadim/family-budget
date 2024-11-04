@@ -1,5 +1,6 @@
 <script setup>
 import BudgetTable from '@/components/BudgetTable.vue';
+import EditBudgetModal from '@/components/EditBudgetModal.vue';
 import MonthControl from '@/components/MonthControl.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
@@ -14,6 +15,7 @@ const toast = useToast();
 
 const monthOffset = ref(0);
 const isLoading = ref(false);
+const isOpen = ref(false);
 
 const handleBackMonth = () => (monthOffset.value -= 1);
 const handleForwardMonth = () => (monthOffset.value += 1);
@@ -27,6 +29,11 @@ const getBudget = async (monthOffset) => {
   } finally {
     isLoading.value = false;
   }
+};
+
+const editBudget = () => {
+  console.warn('Edit Budget');
+  isOpen.value = false;
 };
 
 onMounted(async () => {
@@ -43,6 +50,7 @@ watch(monthOffset, async () => {
   <MonthControl
     @onBack="handleBackMonth"
     @onForward="handleForwardMonth"
+    @onEdit="isOpen = true"
     :monthOffset="monthOffset"
   />
 
@@ -51,6 +59,8 @@ watch(monthOffset, async () => {
   </div>
 
   <BudgetTable v-else :budgetData="budgetStore.budget" />
+
+  <EditBudgetModal :visible="isOpen" @onClose="isOpen = false" @onEdit="editBudget" />
 </template>
 
 <style scoped>

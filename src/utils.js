@@ -26,7 +26,7 @@ export const prepareDateStructure = (dateStr) => {
   let currentDate = new Date(startDate.getTime());
   while (currentDate <= endDate) {
     const date = moment(currentDate).format(SERVER_DATE_FORMAT);
-    dates[date] = [];
+    dates[date] = {};
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
@@ -34,7 +34,7 @@ export const prepareDateStructure = (dateStr) => {
 };
 
 export const groupBudgetByCategory = (budgetData) => {
-  if (!budgetData) {
+  if (!budgetData || !budgetData.length) {
     return [];
   }
 
