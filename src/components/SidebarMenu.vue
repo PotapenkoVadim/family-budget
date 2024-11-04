@@ -71,7 +71,12 @@ const handleSubmit = async () => {
             <a
               :href="href"
               v-bind="props.action"
-              @click="navigate"
+              @click="
+                (p) => {
+                  navigate(p);
+                  $emit('afterNavigate');
+                }
+              "
               :class="{
                 'sidebar-menu__link': true,
                 'sidebar-menu__link_active': isActive
