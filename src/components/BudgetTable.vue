@@ -36,10 +36,14 @@ const dates = computed(() => {
         </div>
       </div>
 
-      <div class="table__data">
+      <div class="table__wrapper">
         <div class="table__empty" v-if="isEmpty">Данные за этот месяц отсутствуют</div>
 
-        <div v-else>Budget Data Here</div>
+        <div v-else v-for="date in dates" :key="date" class="table__data">
+          <div v-for="category in CATEGORIES" class="table__item" :key="category">
+            {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || '-' }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -60,13 +64,16 @@ const dates = computed(() => {
 
 .table__content {
   width: max-content;
+  height: max-content;
 }
 
 .table__dates {
   position: sticky;
   left: 0;
   background-color: var(--light-dark);
-  margin-top: 38px;
+  margin-top: 40px;
+  box-shadow: 0 2px 8px var(--p-surface-700);
+  height: max-content;
 }
 
 .table__header {
@@ -74,6 +81,7 @@ const dates = computed(() => {
   position: sticky;
   top: 0;
   background-color: var(--light-dark);
+  box-shadow: 2px 0 8px var(--p-surface-700);
 }
 
 .table__item {
@@ -82,6 +90,8 @@ const dates = computed(() => {
   border-right: 1px solid var(--p-surface-700);
   padding: 8px;
   font-size: 0.9rem;
+  width: 100px;
+  height: 40px;
 }
 
 .table__dates .table__item {
@@ -97,6 +107,10 @@ const dates = computed(() => {
   font-size: 0.9rem;
   padding: 16px;
   color: var(--p-red-400);
+}
+
+.table__data {
+  display: flex;
 }
 
 @media (max-width: 1025px) {
