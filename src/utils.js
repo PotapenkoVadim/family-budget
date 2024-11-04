@@ -34,7 +34,7 @@ export const prepareDateStructure = (dateStr) => {
 };
 
 export const groupBudgetByCategory = (budgetData) => {
-  if (!budgetData) {
+  if (!budgetData || !budgetData.length) {
     return [];
   }
 

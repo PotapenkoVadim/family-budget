@@ -7,6 +7,7 @@ export const ROUTER_PATHS = {
 };
 
 export const SERVER_DATE_FORMAT = 'YYYY-MM-DD';
+export const CLIENT_DATE_FORMAT = 'DD.MM.YYYY';
 export const TOAST_DEFAULT_ERROR_MESSAGE = {
   severity: 'error',
   summary: 'Произошла ошибка! Повторите попытку позже.',
@@ -28,6 +29,22 @@ export const MONTHS = [
   'Ноябрь',
   'Декабрь'
 ];
+
+export const CATEGORIES_DIC = {
+  meal: 'Продукты',
+  meat: 'Мясо',
+  restaurant: 'Рестораны',
+  household: 'Хоз траты',
+  pets: 'Питомцы',
+  communal: 'Коммуналка',
+  internet: 'Интернет',
+  apartments: 'Квартира',
+  health: 'Здоровье',
+  other: 'Другое',
+  clothes: 'Одежда',
+  deposit: 'Отложено',
+  income: 'Доход'
+};
 
 export const CATEGORIES = [
   'meal',

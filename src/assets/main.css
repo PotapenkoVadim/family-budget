@@ -10,6 +10,7 @@
   --white: #ddd;
   --secondary-white: #c2c2c2;
   --accent: var(--p-primary-400);
+  --light-dark: var(--p-surface-900);
 }
 
 *,
