@@ -1,6 +1,6 @@
 <script setup>
 import { CATEGORIES, CATEGORIES_DIC } from '@/constants';
-import { groupBudgetByCategory, toClientDate } from '@/utils';
+import { calculateTotalByDay, groupBudgetByCategory, toClientDate } from '@/utils';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -33,6 +33,7 @@ const dates = computed(() => {
         <div v-for="category in CATEGORIES" :key="category" class="table__item">
           {{ CATEGORIES_DIC[category] }}
         </div>
+        <div class="table__item">Итого</div>
       </div>
 
       <div class="table__wrapper">
@@ -47,6 +48,7 @@ const dates = computed(() => {
           >
             {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || '-' }}
           </div>
+          <div class="table__item table__total">{{ calculateTotalByDay(tableData[date]) }}</div>
         </div>
       </div>
     </div>
@@ -78,6 +80,7 @@ const dates = computed(() => {
   margin-top: 40px;
   box-shadow: 0 2px 8px var(--p-surface-700);
   height: max-content;
+  z-index: 1;
 }
 
 .table__header {
@@ -115,6 +118,10 @@ const dates = computed(() => {
 
 .table__data {
   display: flex;
+}
+
+.table__total {
+  font-weight: 600;
 }
 
 @media (max-width: 1025px) {

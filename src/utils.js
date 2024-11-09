@@ -52,3 +52,7 @@ export const groupBudgetByCategory = (budgetData) => {
 
 export const toServerDate = (date) => moment(date).format(SERVER_DATE_FORMAT);
 export const toClientDate = (date) => moment(date).format(CLIENT_DATE_FORMAT);
+
+export const calculateTotalByDay = (data) => {
+  return Object.values(data).reduce((acc, item) => (acc += item[0].sum), 0);
+};
