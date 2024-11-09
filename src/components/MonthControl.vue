@@ -3,17 +3,39 @@ import { getMonthName } from '@/utils';
 import Button from 'primevue/button';
 
 const props = defineProps({
-  monthOffset: Number
+  monthOffset: Number,
+  isLoading: Boolean
 });
 </script>
 
 <template>
   <div class="month">
-    <Button text @click="$emit('onBack')" icon="pi pi-caret-left" size="small" />
-    <div class="month__text">{{ getMonthName(props.monthOffset) }}</div>
-    <Button text @click="$emit('onForward')" icon="pi pi-caret-right" size="small" />
+    <Button
+      :disabled="props.isLoading"
+      text
+      @click="$emit('onBack')"
+      icon="pi pi-caret-left"
+      size="small"
+    />
 
-    <Button text @click="$emit('onEdit')" class="month__add" icon="pi pi-pencil" size="small" />
+    <div class="month__text">{{ getMonthName(props.monthOffset) }}</div>
+
+    <Button
+      :disabled="props.isLoading"
+      text
+      @click="$emit('onForward')"
+      icon="pi pi-caret-right"
+      size="small"
+    />
+
+    <Button
+      :disabled="props.isLoading"
+      text
+      @click="$emit('onEdit')"
+      class="month__add"
+      icon="pi pi-pencil"
+      size="small"
+    />
   </div>
 </template>
 
