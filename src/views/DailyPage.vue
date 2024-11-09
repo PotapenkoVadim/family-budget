@@ -31,9 +31,17 @@ const getBudget = async (monthOffset) => {
   }
 };
 
-const editBudget = () => {
-  console.warn('Edit Budget');
+const editBudget = async (budgetItem) => {
   isOpen.value = false;
+  isLoading.value = true;
+  try {
+    await budgetStore.insertBudgetItem(budgetItem, getFirstAndLastDayOfMonth(monthOffset));
+  } catch (error) {
+    console.warn(error);
+    toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 onMounted(async () => {
@@ -52,8 +60,8 @@ watch(monthOffset, async () => {
     @onForward="handleForwardMonth"
     @onEdit="isOpen = true"
     :monthOffset="monthOffset"
+    :isLoading="isLoading"
   />
-
   <div class="daily__spinner" v-if="isLoading">
     <ProgressSpinner />
   </div>
