@@ -1,10 +1,10 @@
 import moment from 'moment';
-import { MONTHS, SERVER_DATE_FORMAT } from './constants';
+import { CLIENT_DATE_FORMAT, MONTHS, SERVER_DATE_FORMAT } from './constants';
 
 export const getFirstAndLastDayOfMonth = (offset) => {
   const currentDate = moment().add(offset, 'month');
-  const start = currentDate.startOf('month').format(SERVER_DATE_FORMAT);
-  const end = currentDate.endOf('month').format(SERVER_DATE_FORMAT);
+  const start = toServerDate(currentDate.startOf('month'));
+  const end = toServerDate(currentDate.endOf('month'));
 
   return [start, end];
 };
@@ -25,7 +25,7 @@ export const prepareDateStructure = (dateStr) => {
 
   let currentDate = new Date(startDate.getTime());
   while (currentDate <= endDate) {
-    const date = moment(currentDate).format(SERVER_DATE_FORMAT);
+    const date = toServerDate(currentDate);
     dates[date] = {};
     currentDate.setDate(currentDate.getDate() + 1);
   }
@@ -49,3 +49,6 @@ export const groupBudgetByCategory = (budgetData) => {
 
   return budgetByDates;
 };
+
+export const toServerDate = (date) => moment(date).format(SERVER_DATE_FORMAT);
+export const toClientDate = (date) => moment(date).format(CLIENT_DATE_FORMAT);

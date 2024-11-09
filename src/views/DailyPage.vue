@@ -16,6 +16,7 @@ const toast = useToast();
 const monthOffset = ref(0);
 const isLoading = ref(false);
 const isOpen = ref(false);
+const selectedBudgetItem = ref();
 
 const handleBackMonth = () => (monthOffset.value -= 1);
 const handleForwardMonth = () => (monthOffset.value += 1);
@@ -35,12 +36,19 @@ const editBudget = async (budgetItem) => {
   isOpen.value = false;
   isLoading.value = true;
   try {
-    await budgetStore.insertBudgetItem(budgetItem, getFirstAndLastDayOfMonth(monthOffset));
+    await budgetStore.insertBudgetItem(budgetItem, getFirstAndLastDayOfMonth(monthOffset.value));
   } catch (error) {
     console.warn(error);
     toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
   } finally {
     isLoading.value = false;
+  }
+};
+
+const selectBudgetItem = (value) => {
+  if (value) {
+    selectedBudgetItem.value = value;
+    isOpen.value = true;
   }
 };
 
@@ -66,9 +74,15 @@ watch(monthOffset, async () => {
     <ProgressSpinner />
   </div>
 
-  <BudgetTable v-else :budgetData="budgetStore.budget" />
+  <BudgetTable v-else :budgetData="budgetStore.budget" @onClick="selectBudgetItem" />
 
-  <EditBudgetModal :visible="isOpen" @onClose="isOpen = false" @onEdit="editBudget" />
+  <EditBudgetModal
+    :budget="budgetStore.budget"
+    :visible="isOpen"
+    :selectedBudgetItem="selectedBudgetItem"
+    @onClose="isOpen = false"
+    @onEdit="editBudget"
+  />
 </template>
 
 <style scoped>
