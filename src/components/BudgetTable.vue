@@ -1,7 +1,6 @@
 <script setup>
-import { CATEGORIES, CATEGORIES_DIC, CLIENT_DATE_FORMAT } from '@/constants';
-import { groupBudgetByCategory } from '@/utils';
-import moment from 'moment';
+import { CATEGORIES, CATEGORIES_DIC } from '@/constants';
+import { groupBudgetByCategory, toClientDate } from '@/utils';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -25,7 +24,7 @@ const dates = computed(() => {
   <div class="table">
     <div class="table__dates">
       <div v-for="date in dates" :key="date" class="table__item">
-        {{ moment(date).format(CLIENT_DATE_FORMAT) }}
+        {{ toClientDate(date) }}
       </div>
     </div>
 
@@ -40,7 +39,12 @@ const dates = computed(() => {
         <div class="table__empty" v-if="isEmpty">Данные за этот месяц отсутствуют</div>
 
         <div v-else v-for="date in dates" :key="date" class="table__data">
-          <div v-for="category in CATEGORIES" class="table__item" :key="category">
+          <div
+            v-for="category in CATEGORIES"
+            class="table__item"
+            :key="category"
+            @click="$emit('onClick', tableData[date][category])"
+          >
             {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || '-' }}
           </div>
         </div>

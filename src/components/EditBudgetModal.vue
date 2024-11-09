@@ -1,6 +1,6 @@
 <script setup>
-import { CATEGORIES_DIC, SERVER_DATE_FORMAT } from '@/constants';
-import moment from 'moment';
+import { CATEGORIES_DIC } from '@/constants';
+import { toServerDate } from '@/utils';
 import Button from 'primevue/button';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
@@ -12,7 +12,9 @@ import { ref, watch } from 'vue';
 
 const emit = defineEmits(['onEdit', 'onClose']);
 const props = defineProps({
-  visible: Boolean
+  visible: Boolean,
+  budget: Object,
+  selectedBudgetItem: Object
 });
 
 const date = ref(new Date());
@@ -39,7 +41,7 @@ const validate = () => {
 const submit = () => {
   if (validate()) {
     emit('onEdit', {
-      date: moment(date.value).format(SERVER_DATE_FORMAT),
+      date: toServerDate(date.value),
       sum: sum.value,
       category: category.value.code,
       comment: comment.value,
@@ -59,6 +61,28 @@ watch(
     }
   }
 );
+
+watch([() => props.budget, date, category], ([budget, date, category]) => {
+  const edited = budget?.find(
+    (item) => item.category === category?.code && item.date === toServerDate(date)
+  );
+
+  sum.value = edited?.sum;
+});
+
+watch(
+  () => props.selectedBudgetItem,
+  ([selectedBudgetItem]) => {
+    if (selectedBudgetItem) {
+      date.value = new Date(selectedBudgetItem.date);
+      comment.value = selectedBudgetItem.comment;
+      category.value = {
+        code: selectedBudgetItem.category,
+        name: CATEGORIES_DIC[selectedBudgetItem.category]
+      };
+    }
+  }
+);
 </script>
 
 <template>
@@ -72,8 +96,21 @@ watch(
     <form id="edit-budget" class="modal__content" @submit.prevent="submit">
       <div>
         <label class="modal__label" for="date">Дата покупки</label>
-        <DatePicker dateFormat="dd.mm.yy" inputId="date" v-model="date" fluid />
+        <DatePicker :required="true" dateFormat="dd.mm.yy" inputId="date" v-model="date" fluid />
         <Message v-if="!isValidDate" severity="error">Обязательное поле</Message>
+      </div>
+
+      <div>
+        <label class="modal__label" for="category">Категория</label>
+        <Select
+          :required="true"
+          optionLabel="name"
+          inputId="category"
+          :options="categories"
+          v-model="category"
+          fluid
+        />
+        <Message v-if="!isValidCategory" severity="error">Обязательное поле</Message>
       </div>
 
       <div>
@@ -84,19 +121,15 @@ watch(
           mode="currency"
           currency="RUB"
           locale="de-RU"
+          :required="true"
           fluid
         />
         <Message v-if="!isValidSum" severity="error">Обязательное поле</Message>
       </div>
 
       <div>
-        <label class="modal__label" for="sum">Категория</label>
-        <Select optionLabel="name" :options="categories" v-model="category" fluid />
-        <Message v-if="!isValidCategory" severity="error">Обязательное поле</Message>
-      </div>
-      <div>
         <label class="modal__label" for="comment">Комментарий</label>
-        <Textarea v-model="comment" rows="3" fluid />
+        <Textarea v-model="comment" id="comment" rows="3" fluid />
       </div>
     </form>
 
@@ -111,7 +144,7 @@ watch(
 
 <style scoped>
 .modal__content {
-  width: 680px;
+  width: 400px;
 }
 
 .modal__buttons {

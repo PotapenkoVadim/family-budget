@@ -11,7 +11,8 @@ export const useBudget = defineStore('budget', () => {
       .from('budget')
       .select('*')
       .lte('date', dateRange[1])
-      .gte('date', dateRange[0]);
+      .gte('date', dateRange[0])
+      .eq('demo', true); // TODO: demo
 
     if (error) {
       throw new Error(error.message);
