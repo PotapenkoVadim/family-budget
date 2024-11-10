@@ -52,6 +52,11 @@ const selectBudgetItem = (value) => {
   }
 };
 
+const closeEditModal = () => {
+  isOpen.value = false;
+  selectedBudgetItem.value = undefined;
+};
+
 onMounted(async () => {
   await getBudget(monthOffset.value);
 });
@@ -80,7 +85,7 @@ watch(monthOffset, async () => {
     :budget="budgetStore.budget"
     :visible="isOpen"
     :selectedBudgetItem="selectedBudgetItem"
-    @onClose="isOpen = false"
+    @onClose="closeEditModal"
     @onEdit="editBudget"
   />
 </template>

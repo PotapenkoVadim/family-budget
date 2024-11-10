@@ -44,8 +44,7 @@ const submit = () => {
       date: toServerDate(date.value),
       sum: sum.value,
       category: category.value.code,
-      comment: comment.value,
-      demo: true // TODO: should add demo item for guests
+      comment: comment.value
     });
   }
 };
@@ -72,13 +71,13 @@ watch([() => props.budget, date, category], ([budget, date, category]) => {
 
 watch(
   () => props.selectedBudgetItem,
-  ([selectedBudgetItem]) => {
-    if (selectedBudgetItem) {
-      date.value = new Date(selectedBudgetItem.date);
-      comment.value = selectedBudgetItem.comment;
+  (prev) => {
+    if (prev) {
+      date.value = new Date(prev[0].date);
+      comment.value = prev[0].comment;
       category.value = {
-        code: selectedBudgetItem.category,
-        name: CATEGORIES_DIC[selectedBudgetItem.category]
+        code: prev[0].category,
+        name: CATEGORIES_DIC[prev[0].category]
       };
     }
   }

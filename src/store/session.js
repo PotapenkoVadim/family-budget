@@ -9,7 +9,13 @@ export const useSession = defineStore('session', () => {
     const { data, error } = await supabase.auth.getSession();
 
     if (data.session) {
-      currentSession.value = data.session;
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', data.session.user.id)
+        .maybeSingle();
+
+      currentSession.value = { ...data.session, profile };
     }
 
     if (error) {

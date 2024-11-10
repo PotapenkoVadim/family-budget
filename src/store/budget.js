@@ -1,18 +1,21 @@
 import { supabase } from '@/clients/supabase';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useSession } from './session';
 
 export const useBudget = defineStore('budget', () => {
+  const sessionStorage = useSession();
+  const isDemo = sessionStorage.currentSession.profile.access_type === 'demo';
+
   const budget = ref(null);
 
   const getBudget = async (dateRange) => {
-    // TODO: should return demo for guests
     const { data, error } = await supabase
       .from('budget')
       .select('*')
       .lte('date', dateRange[1])
       .gte('date', dateRange[0])
-      .eq('demo', true); // TODO: demo
+      .eq('demo', isDemo);
 
     if (error) {
       throw new Error(error.message);
@@ -27,7 +30,7 @@ export const useBudget = defineStore('budget', () => {
       .update(value)
       .eq('date', value.date)
       .eq('category', value.category)
-      .eq('demo', true); // TODO: demo
+      .eq('demo', isDemo);
 
     if (error) {
       throw new Error(error.message);
@@ -43,15 +46,16 @@ export const useBudget = defineStore('budget', () => {
   };
 
   const insertBudgetItem = async (value, dateRange) => {
-    // TODO: should return demo for guests
+    const data = { ...value, demo: isDemo };
     let { data: budget } = await supabase
       .from('budget')
       .select('id')
       .eq('date', value.date)
-      .eq('category', value.category);
+      .eq('category', value.category)
+      .eq('demo', isDemo);
 
-    if (budget.length) await updateItem(value);
-    else await createItem(value);
+    if (budget.length) await updateItem(data);
+    else await createItem(data);
     await getBudget(dateRange);
   };
 
