@@ -35,7 +35,7 @@ export const prepareDateStructure = (dateStr) => {
 
 export const groupBudgetByCategory = (budgetData) => {
   if (!budgetData || !budgetData.length) {
-    return [];
+    return {};
   }
 
   const budgetByDates = prepareDateStructure(budgetData[0].date);
@@ -52,3 +52,23 @@ export const groupBudgetByCategory = (budgetData) => {
 
 export const toServerDate = (date) => moment(date).format(SERVER_DATE_FORMAT);
 export const toClientDate = (date) => moment(date).format(CLIENT_DATE_FORMAT);
+
+export const calculateTotalByDay = (data) => {
+  return Object.values(data).reduce((acc, item) => (acc += item[0].sum), 0);
+};
+
+export const calculateTotalByCategory = (data) => {
+  let res = {};
+  const value = Object.values(data);
+
+  if (value.length) {
+    value.forEach((item) => {
+      for (let k in item) {
+        if (!res[k]) res[k] = 0;
+        res[k] += item[k].reduce((acc, i) => (acc += i.sum), 0);
+      }
+    });
+  }
+
+  return res;
+};

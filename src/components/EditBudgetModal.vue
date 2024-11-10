@@ -105,7 +105,7 @@ watch(
         <Select
           :required="true"
           optionLabel="name"
-          inputId="category"
+          labelId="category"
           :options="categories"
           v-model="category"
           fluid

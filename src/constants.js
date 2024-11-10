@@ -61,3 +61,5 @@ export const CATEGORIES = [
   'deposit',
   'income'
 ];
+
+export const DASH_CHAR = '-';
