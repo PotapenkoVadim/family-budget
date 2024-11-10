@@ -1,6 +1,11 @@
 <script setup>
-import { CATEGORIES, CATEGORIES_DIC } from '@/constants';
-import { calculateTotalByDay, groupBudgetByCategory, toClientDate } from '@/utils';
+import { CATEGORIES, CATEGORIES_DIC, DASH_CHAR } from '@/constants';
+import {
+  calculateTotalByCategory,
+  calculateTotalByDay,
+  groupBudgetByCategory,
+  toClientDate
+} from '@/utils';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -18,6 +23,10 @@ const isEmpty = computed(() => {
 const dates = computed(() => {
   return Object.keys(tableData.value);
 });
+
+const totalByCategories = computed(() => {
+  return calculateTotalByCategory(tableData.value);
+});
 </script>
 
 <template>
@@ -26,6 +35,7 @@ const dates = computed(() => {
       <div v-for="date in dates" :key="date" class="table__item">
         {{ toClientDate(date) }}
       </div>
+      <div v-if="!isEmpty" class="table__item">Итого</div>
     </div>
 
     <div class="table__content">
@@ -46,9 +56,17 @@ const dates = computed(() => {
             :key="category"
             @click="$emit('onClick', tableData[date][category])"
           >
-            {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || '-' }}
+            {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || DASH_CHAR }}
           </div>
-          <div class="table__item table__total">{{ calculateTotalByDay(tableData[date]) }}</div>
+          <div class="table__item table__total-item">
+            {{ calculateTotalByDay(tableData[date]) }}
+          </div>
+        </div>
+
+        <div v-if="!isEmpty" class="table__total">
+          <div v-for="category in CATEGORIES" :key="category" class="table__item table__total-item">
+            {{ totalByCategories[category] || DASH_CHAR }}
+          </div>
         </div>
       </div>
     </div>
@@ -116,12 +134,13 @@ const dates = computed(() => {
   color: var(--p-red-400);
 }
 
+.table__total,
 .table__data {
   display: flex;
 }
 
-.table__total {
-  font-weight: 600;
+.table__total-item {
+  color: var(--p-red-400);
 }
 
 @media (max-width: 1025px) {
