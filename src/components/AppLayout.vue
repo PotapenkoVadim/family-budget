@@ -65,8 +65,8 @@ const isOpenMobileMenu = ref(false);
 }
 
 .layout__spinner {
-  width: 100vw;
-  height: 100vh;
+  width: calc(100vw - 340px);
+  height: calc(100vh - 48px);
   display: flex;
   align-items: center;
   justify-content: center;

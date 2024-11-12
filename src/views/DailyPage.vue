@@ -2,11 +2,11 @@
 import BudgetTable from '@/components/BudgetTable.vue';
 import EditBudgetModal from '@/components/EditBudgetModal.vue';
 import MonthControl from '@/components/MonthControl.vue';
+import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
-import { TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
+import { DAILY_BUDGET_COLS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
-import { getFirstAndLastDayOfMonth } from '@/utils';
-import ProgressSpinner from 'primevue/progressspinner';
+import { getFirstAndLastDayOfPeriod } from '@/utils';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref, watch } from 'vue';
 
@@ -14,16 +14,16 @@ const budgetStore = useBudget();
 const toast = useToast();
 
 const monthOffset = ref(0);
-const isLoading = ref(false);
+const isLoading = ref(true);
 const isOpen = ref(false);
 const selectedBudgetItem = ref();
 
 const handleBackMonth = () => (monthOffset.value -= 1);
 const handleForwardMonth = () => (monthOffset.value += 1);
 const getBudget = async (monthOffset) => {
-  isLoading.value = true;
   try {
-    await budgetStore.getBudget(getFirstAndLastDayOfMonth(monthOffset));
+    const period = getFirstAndLastDayOfPeriod(monthOffset, 'month');
+    await budgetStore.getBudget(period, DAILY_BUDGET_COLS);
   } catch (error) {
     console.warn(error);
     toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
@@ -36,7 +36,8 @@ const editBudget = async (budgetItem) => {
   isOpen.value = false;
   isLoading.value = true;
   try {
-    await budgetStore.insertBudgetItem(budgetItem, getFirstAndLastDayOfMonth(monthOffset.value));
+    const period = getFirstAndLastDayOfPeriod(monthOffset.value, 'month');
+    await budgetStore.insertBudgetItem(budgetItem, period, DAILY_BUDGET_COLS);
   } catch (error) {
     console.warn(error);
     toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
@@ -45,11 +46,14 @@ const editBudget = async (budgetItem) => {
   }
 };
 
-const selectBudgetItem = (value) => {
-  if (value) {
-    selectedBudgetItem.value = value;
-    isOpen.value = true;
-  }
+const selectBudgetItem = (value, date) => {
+  selectedBudgetItem.value = { ...value, date };
+  isOpen.value = true;
+};
+
+const closeEditModal = () => {
+  isOpen.value = false;
+  selectedBudgetItem.value = undefined;
 };
 
 onMounted(async () => {
@@ -70,26 +74,14 @@ watch(monthOffset, async () => {
     :monthOffset="monthOffset"
     :isLoading="isLoading"
   />
-  <div class="daily__spinner" v-if="isLoading">
-    <ProgressSpinner />
-  </div>
-
+  <PageSpinner v-if="isLoading" />
   <BudgetTable v-else :budgetData="budgetStore.budget" @onClick="selectBudgetItem" />
 
   <EditBudgetModal
     :budget="budgetStore.budget"
     :visible="isOpen"
     :selectedBudgetItem="selectedBudgetItem"
-    @onClose="isOpen = false"
+    @onClose="closeEditModal"
     @onEdit="editBudget"
   />
 </template>
-
-<style scoped>
-.daily__spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 36px;
-}
-</style>

@@ -54,7 +54,13 @@ const totalByCategories = computed(() => {
             v-for="category in CATEGORIES"
             class="table__item"
             :key="category"
-            @click="$emit('onClick', tableData[date][category])"
+            @click="
+              $emit(
+                'onClick',
+                tableData[date][category] ? tableData[date][category][0] : undefined,
+                date
+              )
+            "
           >
             {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || DASH_CHAR }}
           </div>
