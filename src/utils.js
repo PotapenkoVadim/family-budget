@@ -1,10 +1,10 @@
 import moment from 'moment';
 import { CLIENT_DATE_FORMAT, MONTHS, SERVER_DATE_FORMAT } from './constants';
 
-export const getFirstAndLastDayOfMonth = (offset) => {
-  const currentDate = moment().add(offset, 'month');
-  const start = toServerDate(currentDate.startOf('month'));
-  const end = toServerDate(currentDate.endOf('month'));
+export const getFirstAndLastDayOfPeriod = (offset, period) => {
+  const currentDate = moment().add(offset, period);
+  const start = toServerDate(currentDate.startOf(period));
+  const end = toServerDate(currentDate.endOf(period));
 
   return [start, end];
 };

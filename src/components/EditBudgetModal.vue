@@ -73,11 +73,11 @@ watch(
   () => props.selectedBudgetItem,
   (prev) => {
     if (prev) {
-      date.value = new Date(prev[0].date);
-      comment.value = prev[0].comment;
+      date.value = new Date(prev.date);
+      comment.value = prev.comment;
       category.value = {
-        code: prev[0].category,
-        name: CATEGORIES_DIC[prev[0].category]
+        code: prev.category,
+        name: CATEGORIES_DIC[prev.category]
       };
     }
   }
