@@ -1,12 +1,12 @@
 <script setup>
+import BudgetControl from '@/components/BudgetControl.vue';
 import BudgetTable from '@/components/BudgetTable.vue';
 import EditBudgetModal from '@/components/EditBudgetModal.vue';
-import MonthControl from '@/components/MonthControl.vue';
 import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { DAILY_BUDGET_COLS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
-import { getFirstAndLastDayOfPeriod } from '@/utils';
+import { getFirstAndLastDayOfPeriod, getMonthName } from '@/utils';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref, watch } from 'vue';
 
@@ -21,6 +21,7 @@ const selectedBudgetItem = ref();
 const handleBackMonth = () => (monthOffset.value -= 1);
 const handleForwardMonth = () => (monthOffset.value += 1);
 const getBudget = async (monthOffset) => {
+  isLoading.value = true;
   try {
     const period = getFirstAndLastDayOfPeriod(monthOffset, 'month');
     await budgetStore.getBudget(period, DAILY_BUDGET_COLS);
@@ -67,13 +68,17 @@ watch(monthOffset, async () => {
 
 <template>
   <PageTitle>Учет повседневных финансов.</PageTitle>
-  <MonthControl
+  <BudgetControl
     @onBack="handleBackMonth"
     @onForward="handleForwardMonth"
     @onEdit="isOpen = true"
     :monthOffset="monthOffset"
     :isLoading="isLoading"
-  />
+    isEditable
+  >
+    {{ getMonthName(monthOffset) }}
+  </BudgetControl>
+
   <PageSpinner v-if="isLoading" />
   <BudgetTable v-else :budgetData="budgetStore.budget" @onClick="selectBudgetItem" />
 

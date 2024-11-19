@@ -17,6 +17,10 @@ export const getMonthName = (offset) => {
   return MONTHS[monthIndex];
 };
 
+export const getYearText = (offset) => {
+  return moment().add(offset, 'year').year();
+};
+
 export const prepareDateStructure = (dateStr) => {
   const [year, month] = dateStr.split('-');
   const startDate = new Date(year, parseInt(month) - 1, 1);
@@ -63,9 +67,9 @@ export const calculateTotalByCategory = (data) => {
 
   if (value.length) {
     value.forEach((item) => {
-      for (let k in item) {
-        if (!res[k]) res[k] = 0;
-        res[k] += item[k].reduce((acc, i) => (acc += i.sum), 0);
+      for (let key in item) {
+        if (!res[key]) res[key] = 0;
+        res[key] += item[key].reduce((acc, i) => (acc += i.sum), 0);
       }
     });
   }

@@ -1,15 +1,14 @@
 <script setup>
-import { getMonthName } from '@/utils';
 import Button from 'primevue/button';
 
 const props = defineProps({
-  monthOffset: Number,
+  isEditable: Boolean,
   isLoading: Boolean
 });
 </script>
 
 <template>
-  <div class="month">
+  <div class="control">
     <Button
       :disabled="props.isLoading"
       text
@@ -18,7 +17,9 @@ const props = defineProps({
       size="small"
     />
 
-    <div class="month__text">{{ getMonthName(props.monthOffset) }}</div>
+    <div class="control__text">
+      <slot></slot>
+    </div>
 
     <Button
       :disabled="props.isLoading"
@@ -29,10 +30,11 @@ const props = defineProps({
     />
 
     <Button
+      v-if="props.isEditable"
       :disabled="props.isLoading"
       text
       @click="$emit('onEdit')"
-      class="month__add"
+      class="control__add"
       icon="pi pi-pencil"
       size="small"
     />
@@ -40,19 +42,19 @@ const props = defineProps({
 </template>
 
 <style scoped>
-.month {
+.control {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin-top: 12px;
 }
 
-.month__text {
+.control__text {
   color: var(--accent);
 }
 
 @media (max-width: 1025px) {
-  .month__add {
+  .control__add {
     margin-left: auto;
   }
 }
