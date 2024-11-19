@@ -64,4 +64,4 @@ export const CATEGORIES = [
 
 export const DASH_CHAR = '-';
 export const ANNUAL_BUDGET_COLS = 'id,sum,category,date';
-export const DAILY_BUDGET_COLS = 'id,sum,category,date,comment';
+export const DAILY_BUDGET_COLS = `${ANNUAL_BUDGET_COLS},comment`;
