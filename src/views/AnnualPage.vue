@@ -1,4 +1,5 @@
 <script setup>
+import AnnualBudgetTable from '@/components/AnnualBudgetTable.vue';
 import BudgetControl from '@/components/BudgetControl.vue';
 import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
@@ -46,5 +47,5 @@ watch(yearOffset, async () => {
   </BudgetControl>
 
   <PageSpinner v-if="isLoading" />
-  <div v-else>Data Table</div>
+  <AnnualBudgetTable v-else :budgetData="budgetStore.budget" />
 </template>
