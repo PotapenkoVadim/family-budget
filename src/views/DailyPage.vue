@@ -1,6 +1,6 @@
 <script setup>
 import BudgetControl from '@/components/BudgetControl.vue';
-import BudgetTable from '@/components/BudgetTable.vue';
+import DailyBudgetTable from '@/components/DailyBudgetTable.vue';
 import EditBudgetModal from '@/components/EditBudgetModal.vue';
 import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
@@ -80,7 +80,7 @@ watch(monthOffset, async () => {
   </BudgetControl>
 
   <PageSpinner v-if="isLoading" />
-  <BudgetTable v-else :budgetData="budgetStore.budget" @onClick="selectBudgetItem" />
+  <DailyBudgetTable v-else :budgetData="budgetStore.budget" @onClick="selectBudgetItem" />
 
   <EditBudgetModal
     :budget="budgetStore.budget"

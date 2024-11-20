@@ -76,3 +76,40 @@ export const calculateTotalByCategory = (data) => {
 
   return res;
 };
+
+export const getAnnualTotal = (data) => {
+  const res = Array.from({ length: 12 }, () => ({}));
+
+  for (let { sum, category, date } of data) {
+    const monthIndex = new Date(date).getMonth();
+
+    if (res[monthIndex]) {
+      res[monthIndex][category] = res[monthIndex][category] ? res[monthIndex][category] + sum : sum;
+    } else {
+      res[monthIndex] = { [category]: sum };
+    }
+  }
+
+  return res;
+};
+
+export const getAnnualTotalByCategory = (data, category) => {
+  switch (category) {
+    case 'income':
+      return data.income;
+    case 'costs':
+      return data.costs;
+    case 'meal':
+      return (data.meal || 0) + (data.meat || 0);
+    case 'entertainment':
+      return data.restaurant;
+    case 'household':
+      return (data.household || 0) + (data.pets || 0);
+    case 'health':
+      return data.health;
+    case 'other':
+      return data.other;
+    case 'deposit':
+      return data.deposit;
+  }
+};
