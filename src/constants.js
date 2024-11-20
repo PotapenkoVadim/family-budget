@@ -78,3 +78,6 @@ export const TOTAL_CATEGORIES = [
   'other',
   'deposit'
 ];
+
+export const EMPTY_DAILY_BUDGET_TEXT = 'Данные за этот месяц отсутствуют';
+export const EMPTY_ANNUAL_BUDGET_TEXT = 'Данные за этот год отсутствуют';

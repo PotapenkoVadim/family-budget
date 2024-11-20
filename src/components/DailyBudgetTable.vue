@@ -1,6 +1,6 @@
 <script setup>
 import BudgetTable from './BudgetTable.vue';
-import { CATEGORIES, CATEGORIES_DIC, DASH_CHAR } from '@/constants';
+import { CATEGORIES, CATEGORIES_DIC, DASH_CHAR, EMPTY_DAILY_BUDGET_TEXT } from '@/constants';
 import {
   calculateTotalByCategory,
   calculateTotalByDay,
@@ -9,6 +9,7 @@ import {
 } from '@/utils';
 import { computed } from 'vue';
 import BudgetTableItem from './BudgetTableItem.vue';
+import BudgetTableEmpty from './BudgetTableEmpty.vue';
 
 const props = defineProps({
   budgetData: Object
@@ -48,7 +49,9 @@ const totalByCategories = computed(() => {
     </template>
 
     <template v-slot:body>
-      <div class="table__empty" v-if="isEmpty">Данные за этот месяц отсутствуют</div>
+      <BudgetTableEmpty v-if="isEmpty">
+        {{ EMPTY_DAILY_BUDGET_TEXT }}
+      </BudgetTableEmpty>
 
       <div v-else v-for="date in dates" :key="date" class="table__data">
         <BudgetTableItem
@@ -79,12 +82,6 @@ const totalByCategories = computed(() => {
 </template>
 
 <style scoped>
-.table__empty {
-  font-size: 0.9rem;
-  padding: 16px;
-  color: var(--p-red-400);
-}
-
 .table__total,
 .table__data {
   display: flex;
