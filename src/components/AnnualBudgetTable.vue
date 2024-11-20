@@ -28,9 +28,11 @@ const isEmpty = computed(() => {
 <template>
   <BudgetTable>
     <template v-slot:side>
-      <BudgetTableItem v-for="month in MONTHS" :key="month">
-        {{ month }}
-      </BudgetTableItem>
+      <template v-if="!isEmpty">
+        <BudgetTableItem v-for="month in MONTHS" :key="month">
+          {{ month }}
+        </BudgetTableItem>
+      </template>
     </template>
 
     <template v-slot:header>
