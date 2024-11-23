@@ -2,8 +2,8 @@
 import BudgetTable from './BudgetTable.vue';
 import { CATEGORIES, CATEGORIES_DIC, DASH_CHAR, EMPTY_DAILY_BUDGET_TEXT } from '@/constants';
 import {
-  calculateTotalByCategory,
-  calculateTotalByDay,
+  calculateDailyResultByCategory,
+  calculateDailyResultByDay,
   groupBudgetByCategory,
   toClientDate
 } from '@/utils';
@@ -28,7 +28,7 @@ const dates = computed(() => {
 });
 
 const totalByCategories = computed(() => {
-  return calculateTotalByCategory(tableData.value);
+  return calculateDailyResultByCategory(tableData.value);
 });
 </script>
 
@@ -67,13 +67,13 @@ const totalByCategories = computed(() => {
         >
           {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || DASH_CHAR }}
         </BudgetTableItem>
-        <BudgetTableItem class="table__total-item">
-          {{ calculateTotalByDay(tableData[date]) }}
+        <BudgetTableItem isTotal>
+          {{ calculateDailyResultByDay(tableData[date]) }}
         </BudgetTableItem>
       </div>
 
       <div v-if="!isEmpty" class="table__total">
-        <BudgetTableItem v-for="category in CATEGORIES" :key="category" class="table__total-item">
+        <BudgetTableItem v-for="category in CATEGORIES" :key="category" isTotal>
           {{ totalByCategories[category] || DASH_CHAR }}
         </BudgetTableItem>
       </div>
@@ -85,9 +85,5 @@ const totalByCategories = computed(() => {
 .table__total,
 .table__data {
   display: flex;
-}
-
-.table__total-item {
-  color: var(--p-red-400);
 }
 </style>

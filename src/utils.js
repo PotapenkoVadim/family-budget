@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { CLIENT_DATE_FORMAT, MONTHS, SERVER_DATE_FORMAT } from './constants';
+import { CLIENT_DATE_FORMAT, DASH_CHAR, MONTHS, SERVER_DATE_FORMAT } from './constants';
 
 export const getFirstAndLastDayOfPeriod = (offset, period) => {
   const currentDate = moment().add(offset, period);
@@ -57,11 +57,11 @@ export const groupBudgetByCategory = (budgetData) => {
 export const toServerDate = (date) => moment(date).format(SERVER_DATE_FORMAT);
 export const toClientDate = (date) => moment(date).format(CLIENT_DATE_FORMAT);
 
-export const calculateTotalByDay = (data) => {
+export const calculateDailyResultByDay = (data) => {
   return Object.values(data).reduce((acc, item) => (acc += item[0].sum), 0);
 };
 
-export const calculateTotalByCategory = (data) => {
+export const calculateDailyResultByCategory = (data) => {
   let res = {};
   const value = Object.values(data);
 
@@ -82,12 +82,7 @@ export const getAnnualTotal = (data) => {
 
   for (let { sum, category, date } of data) {
     const monthIndex = new Date(date).getMonth();
-
-    if (res[monthIndex]) {
-      res[monthIndex][category] = res[monthIndex][category] ? res[monthIndex][category] + sum : sum;
-    } else {
-      res[monthIndex] = { [category]: sum };
-    }
+    res[monthIndex][category] = (res[monthIndex][category] || 0) + sum;
   }
 
   return res;
@@ -112,4 +107,20 @@ export const getAnnualTotalByCategory = (data, category) => {
     case 'deposit':
       return data.deposit;
   }
+};
+
+export const calculateAnnualResultByMonth = (data) => {
+  if (!data) return DASH_CHAR;
+
+  return Object.values(data).reduce((acc, item) => (acc += item), 0);
+};
+
+export const calculateAnnualResultByCategories = (data) => {
+  return data.reduce((acc, item) => {
+    for (let key in item) {
+      acc[key] = (acc[key] || 0) + item[key];
+    }
+
+    return acc;
+  }, {});
 };
