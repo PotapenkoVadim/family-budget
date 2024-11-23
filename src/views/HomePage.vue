@@ -109,7 +109,7 @@ onMounted(async () => {
 .home__card-title {
   font-size: 0.94rem;
   font-weight: 600;
-  color: var(--secondary-white);
+  color: var(--p-gray-400);
   display: flex;
   align-items: center;
   gap: 6px;
