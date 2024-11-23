@@ -104,6 +104,7 @@ const isOpenMobileMenu = ref(false);
 
   .layout__content {
     padding: 16px;
+    width: 100vw;
   }
 }
 
