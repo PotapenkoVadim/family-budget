@@ -9,7 +9,12 @@ import {
 import BudgetTable from './BudgetTable.vue';
 import BudgetTableItem from './BudgetTableItem.vue';
 import { computed } from 'vue';
-import { getAnnualTotal, getAnnualTotalByCategory } from '@/utils';
+import {
+  calculateAnnualResultByCategories,
+  calculateAnnualResultByMonth,
+  getAnnualTotal,
+  getAnnualTotalByCategory
+} from '@/utils';
 import BudgetTableEmpty from './BudgetTableEmpty.vue';
 
 const props = defineProps({
@@ -23,6 +28,10 @@ const tableData = computed(() => {
 const isEmpty = computed(() => {
   return tableData.value.every((obj) => Object.keys(obj).length === 0);
 });
+
+const totalByCategories = computed(() => {
+  return calculateAnnualResultByCategories(tableData.value);
+});
 </script>
 
 <template>
@@ -32,6 +41,7 @@ const isEmpty = computed(() => {
         <BudgetTableItem v-for="month in MONTHS" :key="month">
           {{ month }}
         </BudgetTableItem>
+        <BudgetTableItem v-if="!isEmpty">Итого</BudgetTableItem>
       </template>
     </template>
 
@@ -39,6 +49,7 @@ const isEmpty = computed(() => {
       <BudgetTableItem v-for="category in TOTAL_CATEGORIES" :key="category">
         {{ CATEGORIES_DIC[category] }}
       </BudgetTableItem>
+      <BudgetTableItem>Итого</BudgetTableItem>
     </template>
 
     <template v-slot:body>
@@ -50,12 +61,22 @@ const isEmpty = computed(() => {
         <BudgetTableItem v-for="category in TOTAL_CATEGORIES" :key="category">
           {{ getAnnualTotalByCategory(item, category) || DASH_CHAR }}
         </BudgetTableItem>
+        <BudgetTableItem isTotal>
+          {{ calculateAnnualResultByMonth(tableData[index]) }}
+        </BudgetTableItem>
+      </div>
+
+      <div v-if="!isEmpty" class="table__total">
+        <BudgetTableItem v-for="category in TOTAL_CATEGORIES" :key="category" isTotal>
+          {{ totalByCategories[category] || DASH_CHAR }}
+        </BudgetTableItem>
       </div>
     </template>
   </BudgetTable>
 </template>
 
 <style scoped>
+.table__total,
 .table__data {
   display: flex;
 }

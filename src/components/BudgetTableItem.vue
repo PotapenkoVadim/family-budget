@@ -1,11 +1,12 @@
 <script setup>
 const props = defineProps({
-  class: String
+  class: String,
+  isTotal: Boolean
 });
 </script>
 
 <template>
-  <div :class="['table__item', props.class]">
+  <div :class="['table__item', props.class, { 'table__total-item': props.isTotal }]">
     <slot></slot>
   </div>
 </template>
@@ -28,5 +29,9 @@ const props = defineProps({
 .table__side .table__item {
   font-size: 0.75rem;
   border-right: 1px solid var(--p-surface-500);
+}
+
+.table__total-item {
+  color: var(--p-red-400);
 }
 </style>
