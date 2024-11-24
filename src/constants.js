@@ -3,7 +3,7 @@ export const ROUTER_PATHS = {
   daily: '/daily',
   annual: '/annual',
   login: '/login',
-  error: '/error'
+  card: '/card'
 };
 
 export const SERVER_DATE_FORMAT = 'YYYY-MM-DD';

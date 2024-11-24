@@ -20,12 +20,17 @@ const router = createRouter({
       meta: { shouldAuth: true }
     },
     {
+      path: ROUTER_PATHS.card,
+      component: () => import('@/views/CreditCardPage.vue'),
+      meta: { shouldAuth: true }
+    },
+    {
       path: ROUTER_PATHS.login,
       component: () => import('@/views/LoginPage.vue'),
       meta: { shouldNotAuthorized: true }
     },
     {
-      path: ROUTER_PATHS.error,
+      path: '/:pathMatch(.*)*',
       component: () => import('@/views/ErrorPage.vue')
     }
   ]
