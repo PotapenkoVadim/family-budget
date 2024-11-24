@@ -35,6 +35,13 @@ const menuItems = ref([
     show: computed(() => !!sessionStore.currentSession)
   },
   {
+    key: 'card',
+    label: 'Кредитная карта',
+    icon: 'pi pi-credit-card',
+    route: ROUTER_PATHS.card,
+    show: computed(() => !!sessionStore.currentSession)
+  },
+  {
     key: 'login',
     label: 'Войти',
     icon: 'pi pi-user',

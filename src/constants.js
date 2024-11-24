@@ -3,7 +3,7 @@ export const ROUTER_PATHS = {
   daily: '/daily',
   annual: '/annual',
   login: '/login',
-  error: '/error'
+  card: '/card'
 };
 
 export const SERVER_DATE_FORMAT = 'YYYY-MM-DD';
@@ -117,7 +117,8 @@ export const CHART_COLORS_HOVER = [
 export const CHART_OPTIONS = {
   plugins: {
     legend: {
-      labels: { usePointStyle: true, color: 'white' }
+      labels: { usePointStyle: true, color: 'white' },
+      position: 'bottom'
     }
   }
 };
