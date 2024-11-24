@@ -117,7 +117,8 @@ export const CHART_COLORS_HOVER = [
 export const CHART_OPTIONS = {
   plugins: {
     legend: {
-      labels: { usePointStyle: true, color: 'white' }
+      labels: { usePointStyle: true, color: 'white' },
+      position: 'bottom'
     }
   }
 };

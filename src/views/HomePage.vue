@@ -5,13 +5,14 @@ import ReviewBudget from '@/components/ReviewBudget.vue';
 import { ANNUAL_BUDGET_COLS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
 import {
-  getChartDateByMonth,
+  getChartData,
   getFirstAndLastDayOfPeriod,
-  getInComeByMonth,
-  getMaxSpendByMonth,
-  getMostSpendByMonth,
-  getMostSpendCategoryByMonth,
-  isCurrentMonth
+  getInCome,
+  getMaxSpend,
+  getMostSpend,
+  getMostSpendCategory,
+  isCurrentMonth,
+  transformToAnnualBudget
 } from '@/utils';
 import Card from 'primevue/card';
 import { useToast } from 'primevue/usetoast';
@@ -43,27 +44,27 @@ onMounted(async () => {
 const data = computed(() => {
   return isMonthPanel.value
     ? budgetStore.budget.filter((item) => isCurrentMonth(item.date))
-    : budgetStore.budget;
+    : transformToAnnualBudget(budgetStore.budget);
 });
 
 const chartData = computed(() => {
-  return getChartDateByMonth(data.value);
+  return getChartData(data.value);
 });
 
 const mostSpendText = computed(() => {
-  return getMostSpendByMonth(data.value);
+  return getMostSpend(data.value);
 });
 
 const mostSpendCategoryText = computed(() => {
-  return getMostSpendCategoryByMonth(data.value);
+  return getMostSpendCategory(data.value);
 });
 
 const maxSpendText = computed(() => {
-  return getMaxSpendByMonth(data.value);
+  return getMaxSpend(data.value);
 });
 
 const inComeText = computed(() => {
-  return getInComeByMonth(data.value);
+  return getInCome(data.value);
 });
 </script>
 

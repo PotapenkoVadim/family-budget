@@ -135,7 +135,7 @@ export const calculateAnnualResultByCategories = (data) => {
   }, {});
 };
 
-export const getChartDateByMonth = (budget) => {
+export const getChartData = (budget) => {
   if (!budget || !budget.length) return {};
 
   const values = budget.reduce((acc, { category, sum }) => {
@@ -157,7 +157,7 @@ export const getChartDateByMonth = (budget) => {
   };
 };
 
-export const getMostSpendByMonth = (budget) => {
+export const getMostSpend = (budget) => {
   if (!budget || !budget.length) return DASH_CHAR;
 
   const { date, category, sum } = budget.sort((a, b) => b.sum - a.sum)[0];
@@ -165,7 +165,7 @@ export const getMostSpendByMonth = (budget) => {
   return `${toClientDate(date)} ${CATEGORIES_DIC[category]} - ${sum}₽`;
 };
 
-export const getMostSpendCategoryByMonth = (budget) => {
+export const getMostSpendCategory = (budget) => {
   if (!budget || !budget.length) return DASH_CHAR;
 
   const value = budget.reduce((acc, { category, sum }) => {
@@ -181,7 +181,7 @@ export const getMostSpendCategoryByMonth = (budget) => {
   return `${CATEGORIES_DIC[maxEntry[0]]} - ${maxEntry[1]}₽`;
 };
 
-export const getMaxSpendByMonth = (budget) => {
+export const getMaxSpend = (budget) => {
   if (!budget || !budget.length) return DASH_CHAR;
 
   const value = budget.reduce((acc, { sum }) => (acc += sum), 0);
@@ -189,7 +189,7 @@ export const getMaxSpendByMonth = (budget) => {
   return `${value}₽`;
 };
 
-export const getInComeByMonth = (budget) => {
+export const getInCome = (budget) => {
   if (!budget || !budget.length) return DASH_CHAR;
 
   const value = budget.reduce((acc, { category, sum }) => {
@@ -199,4 +199,16 @@ export const getInComeByMonth = (budget) => {
   }, 0);
 
   return `${value}₽`;
+};
+
+export const transformToAnnualBudget = (budget) => {
+  const categoryMap = {
+    meat: 'meal',
+    pets: 'household'
+  };
+
+  return budget?.map((item) => ({
+    ...item,
+    category: categoryMap[item.category] || item.category
+  }));
 };
