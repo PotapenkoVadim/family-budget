@@ -1,5 +1,13 @@
 import moment from 'moment';
-import { CLIENT_DATE_FORMAT, DASH_CHAR, MONTHS, SERVER_DATE_FORMAT } from './constants';
+import {
+  CATEGORIES_DIC,
+  CHART_COLORS,
+  CHART_COLORS_HOVER,
+  CLIENT_DATE_FORMAT,
+  DASH_CHAR,
+  MONTHS,
+  SERVER_DATE_FORMAT
+} from './constants';
 
 export const getFirstAndLastDayOfPeriod = (offset, period) => {
   const currentDate = moment().add(offset, period);
@@ -20,6 +28,8 @@ export const getMonthName = (offset) => {
 export const getYearText = (offset) => {
   return moment().add(offset, 'year').year();
 };
+
+export const isCurrentMonth = (date) => date && moment(date).month() === moment().month();
 
 export const prepareDateStructure = (dateStr) => {
   const [year, month] = dateStr.split('-');
@@ -123,4 +133,70 @@ export const calculateAnnualResultByCategories = (data) => {
 
     return acc;
   }, {});
+};
+
+export const getChartDateByMonth = (budget) => {
+  if (!budget || !budget.length) return {};
+
+  const values = budget.reduce((acc, { category, sum }) => {
+    acc[CATEGORIES_DIC[category]] = (acc[CATEGORIES_DIC[category]] || 0) + sum;
+
+    return acc;
+  }, {});
+
+  return {
+    labels: Object.keys(values),
+    datasets: [
+      {
+        data: Object.values(values),
+        backgroundColor: CHART_COLORS,
+        hoverBackgroundColor: CHART_COLORS_HOVER,
+        borderColor: 'transparent'
+      }
+    ]
+  };
+};
+
+export const getMostSpendByMonth = (budget) => {
+  if (!budget || !budget.length) return DASH_CHAR;
+
+  const { date, category, sum } = budget.sort((a, b) => b.sum - a.sum)[0];
+
+  return `${toClientDate(date)} ${CATEGORIES_DIC[category]} - ${sum}₽`;
+};
+
+export const getMostSpendCategoryByMonth = (budget) => {
+  if (!budget || !budget.length) return DASH_CHAR;
+
+  const value = budget.reduce((acc, { category, sum }) => {
+    acc[category] = (acc[category] || 0) + sum;
+
+    return acc;
+  }, {});
+
+  const maxEntry = Object.entries(value).reduce((max, current) => {
+    return current[1] > max[1] ? current : max;
+  });
+
+  return `${CATEGORIES_DIC[maxEntry[0]]} - ${maxEntry[1]}₽`;
+};
+
+export const getMaxSpendByMonth = (budget) => {
+  if (!budget || !budget.length) return DASH_CHAR;
+
+  const value = budget.reduce((acc, { sum }) => (acc += sum), 0);
+
+  return `${value}₽`;
+};
+
+export const getInComeByMonth = (budget) => {
+  if (!budget || !budget.length) return DASH_CHAR;
+
+  const value = budget.reduce((acc, { category, sum }) => {
+    if (category === 'income') acc += sum;
+
+    return acc;
+  }, 0);
+
+  return `${value}₽`;
 };

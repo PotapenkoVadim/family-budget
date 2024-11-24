@@ -1,24 +1,33 @@
 <script setup>
 import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
-import { DAILY_BUDGET_COLS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
+import ReviewBudget from '@/components/ReviewBudget.vue';
+import { ANNUAL_BUDGET_COLS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
-import { getFirstAndLastDayOfPeriod } from '@/utils';
+import {
+  getChartDateByMonth,
+  getFirstAndLastDayOfPeriod,
+  getInComeByMonth,
+  getMaxSpendByMonth,
+  getMostSpendByMonth,
+  getMostSpendCategoryByMonth,
+  isCurrentMonth
+} from '@/utils';
 import Card from 'primevue/card';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const budgetStore = useBudget();
 const toast = useToast();
 
 const isLoading = ref(true);
-const isMonthPanel = ref('month');
+const isMonthPanel = ref(true);
 
 const getBudget = async () => {
   isLoading.value = true;
   try {
-    const period = getFirstAndLastDayOfPeriod(0, 'month');
-    await budgetStore.getBudget(period, DAILY_BUDGET_COLS);
+    const period = getFirstAndLastDayOfPeriod(0, 'year');
+    await budgetStore.getBudget(period, ANNUAL_BUDGET_COLS);
   } catch (error) {
     console.warn(error);
     toast.add(TOAST_DEFAULT_ERROR_MESSAGE);
@@ -30,11 +39,36 @@ const getBudget = async () => {
 onMounted(async () => {
   await getBudget();
 });
+
+const data = computed(() => {
+  return isMonthPanel.value
+    ? budgetStore.budget.filter((item) => isCurrentMonth(item.date))
+    : budgetStore.budget;
+});
+
+const chartData = computed(() => {
+  return getChartDateByMonth(data.value);
+});
+
+const mostSpendText = computed(() => {
+  return getMostSpendByMonth(data.value);
+});
+
+const mostSpendCategoryText = computed(() => {
+  return getMostSpendCategoryByMonth(data.value);
+});
+
+const maxSpendText = computed(() => {
+  return getMaxSpendByMonth(data.value);
+});
+
+const inComeText = computed(() => {
+  return getInComeByMonth(data.value);
+});
 </script>
 
 <template>
   <PageTitle>Показатели бюджета</PageTitle>
-
   <PageSpinner v-if="isLoading" />
 
   <div v-else class="home__content">
@@ -52,7 +86,17 @@ onMounted(async () => {
 
         <template #content>
           <Transition>
-            <div v-if="isMonthPanel" class="home__card-content">Month Budget Content</div>
+            <ReviewBudget
+              v-if="isMonthPanel"
+              :mostSpend="{ title: 'Самая большая трата:', text: mostSpendText }"
+              :mostSpendCategory="{
+                title: 'Самая затратная категория:',
+                text: mostSpendCategoryText
+              }"
+              :maxSpend="{ title: 'Всего трат:', text: maxSpendText }"
+              :inCome="{ title: 'Доход:', text: inComeText }"
+              :chartData="chartData"
+            />
           </Transition>
         </template>
       </Card>
@@ -70,7 +114,17 @@ onMounted(async () => {
 
         <template #content>
           <Transition>
-            <div v-if="!isMonthPanel" class="home__card-content">Annual Budget Content</div>
+            <ReviewBudget
+              v-if="!isMonthPanel"
+              :mostSpend="{ title: 'Самая большая трата:', text: mostSpendText }"
+              :mostSpendCategory="{
+                title: 'Самая затратная категория:',
+                text: mostSpendCategoryText
+              }"
+              :maxSpend="{ title: 'Всего трат:', text: maxSpendText }"
+              :inCome="{ title: 'Доход:', text: inComeText }"
+              :chartData="chartData"
+            />
           </Transition>
         </template>
       </Card>
@@ -95,7 +149,7 @@ onMounted(async () => {
 .home__card {
   flex: 0;
   min-width: 60px;
-  min-height: 320px;
+  min-height: 500px;
   transition: 0.65s ease-out;
   cursor: pointer;
   overflow: hidden;
@@ -109,11 +163,11 @@ onMounted(async () => {
 .home__card-title {
   font-size: 0.94rem;
   font-weight: 600;
-  color: var(--secondary-white);
+  color: var(--p-gray-400);
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: 0.5s ease-in;
+  transition: 0.5s ease-out;
   width: max-content;
   transform: rotate(-90deg) translate(-60px, -60px);
 }
@@ -123,19 +177,15 @@ onMounted(async () => {
   transform: rotate(0) translate(0, 0);
 }
 
-.home__card-content {
-  margin-top: 12px;
-}
-
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-out;
 }
 
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
-  transform: translateX(250px);
+  transform: translateX(-800px);
 }
 
 @media (max-width: 600px) {
@@ -150,6 +200,11 @@ onMounted(async () => {
 
   .home__card-title {
     transform: rotate(0) translate(0, 0);
+  }
+
+  .home__card-content {
+    flex-direction: column;
+    gap: 14px;
   }
 }
 </style>
