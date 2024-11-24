@@ -81,3 +81,43 @@ export const TOTAL_CATEGORIES = [
 
 export const EMPTY_DAILY_BUDGET_TEXT = 'Данные за этот месяц отсутствуют';
 export const EMPTY_ANNUAL_BUDGET_TEXT = 'Данные за этот год отсутствуют';
+
+export const CHART_COLORS = [
+  '#0A2342',
+  '#2CA58D',
+  '#FFFDF7',
+  '#91171F',
+  '#FAFF7F',
+  '#2D5D7B',
+  '#81ADC8',
+  '#FF5154',
+  '#5941A9',
+  '#32292F',
+  '#17C3B2',
+  '#6D72C3',
+  '#514F59'
+];
+
+export const CHART_COLORS_HOVER = [
+  '#091231',
+  '#1B946C',
+  '#EEECE6',
+  '#80060E',
+  '#E9EE8E',
+  '#1C4C6A',
+  '#709CB&',
+  '#EE4043',
+  '#483098',
+  '#21181E',
+  '#06B2A1',
+  '#5C61B2',
+  '#403E48'
+];
+
+export const CHART_OPTIONS = {
+  plugins: {
+    legend: {
+      labels: { usePointStyle: true, color: 'white' }
+    }
+  }
+};
