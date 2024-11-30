@@ -24,6 +24,22 @@ export const useBudget = defineStore('budget', () => {
     budget.value = data;
   };
 
+  const getCreditBudget = async (dateRange, select = '*') => {
+    const { data, error } = await supabase
+      .from('budget')
+      .select(select)
+      .lte('date', dateRange[1])
+      .gte('date', dateRange[0])
+      .eq('demo', isDemo)
+      .eq('is_credit', true);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    budget.value = data;
+  };
+
   const updateItem = async (value) => {
     const { error } = await supabase
       .from('budget')
@@ -62,6 +78,7 @@ export const useBudget = defineStore('budget', () => {
   return {
     budget,
     getBudget,
-    insertBudgetItem
+    insertBudgetItem,
+    getCreditBudget
   };
 });

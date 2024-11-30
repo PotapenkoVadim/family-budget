@@ -2,6 +2,7 @@
 import { CATEGORIES_DIC } from '@/constants';
 import { toServerDate } from '@/utils';
 import Button from 'primevue/button';
+import Checkbox from 'primevue/checkbox';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import InputNumber from 'primevue/inputnumber';
@@ -24,6 +25,7 @@ const isValidSum = ref(true);
 const category = ref();
 const isValidCategory = ref(true);
 const comment = ref();
+const isCredit = ref(false);
 
 const categories = Object.keys(CATEGORIES_DIC).map((key) => ({
   code: key,
@@ -44,7 +46,8 @@ const submit = () => {
       date: toServerDate(date.value),
       sum: sum.value,
       category: category.value.code,
-      comment: comment.value
+      comment: comment.value,
+      is_credit: isCredit.value
     });
   }
 };
@@ -79,6 +82,7 @@ watch(
         code: prev.category,
         name: CATEGORIES_DIC[prev.category]
       };
+      isCredit.value = prev.is_credit;
     }
   }
 );
@@ -127,6 +131,11 @@ watch(
       </div>
 
       <div>
+        <Checkbox class="modal__checkbox" inputId="is_credit" v-model="isCredit" binary />
+        <label class="modal__label" for="is_credit">Оплата кредитной картой</label>
+      </div>
+
+      <div>
         <label class="modal__label" for="comment">Комментарий</label>
         <Textarea v-model="comment" id="comment" rows="3" fluid />
       </div>
@@ -162,6 +171,10 @@ watch(
 .modal__label {
   font-size: 0.78rem;
   color: var(--secondary-white);
+}
+
+.modal__checkbox {
+  margin-right: 8px;
 }
 
 @media (max-width: 1025px) {
