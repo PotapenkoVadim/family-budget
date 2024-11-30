@@ -67,7 +67,7 @@ watch(monthOffset, async () => {
 </script>
 
 <template>
-  <PageTitle>Учет повседневных финансов.</PageTitle>
+  <PageTitle>Учет повседневных финансов</PageTitle>
   <BudgetControl
     @onBack="handleBackMonth"
     @onForward="handleForwardMonth"

@@ -82,6 +82,7 @@ watch(
         code: prev.category,
         name: CATEGORIES_DIC[prev.category]
       };
+      isCredit.value = prev.is_credit;
     }
   }
 );

@@ -1,5 +1,11 @@
+<script setup>
+const props = defineProps({
+  className: String
+});
+</script>
+
 <template>
-  <div class="table">
+  <div :class="['table', props.className]">
     <div class="table__side">
       <slot name="side"></slot>
     </div>
