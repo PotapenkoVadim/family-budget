@@ -47,8 +47,8 @@ const editBudget = async (budgetItem) => {
   }
 };
 
-const selectBudgetItem = (value, date) => {
-  selectedBudgetItem.value = { ...value, date };
+const selectBudgetItem = (value, date, category) => {
+  selectedBudgetItem.value = { ...value, date, category };
   isOpen.value = true;
 };
 

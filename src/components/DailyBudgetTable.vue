@@ -61,7 +61,8 @@ const totalByCategories = computed(() => {
             $emit(
               'onClick',
               tableData[date][category] ? tableData[date][category][0] : undefined,
-              date
+              date,
+              category
             )
           "
         >
