@@ -31,7 +31,7 @@ export const useBudget = defineStore('budget', () => {
       .lte('date', dateRange[1])
       .gte('date', dateRange[0])
       .eq('demo', isDemo)
-      .eq('is_credit', true);
+      .or('is_credit.eq.true,category.eq.income');
 
     if (error) {
       throw new Error(error.message);
