@@ -18,7 +18,7 @@ const props = defineProps({
   padding: 8px;
   font-size: 0.9rem;
   width: 120px;
-  height: 40px;
+  height: 34px;
   text-align: center;
 }
 

@@ -80,7 +80,12 @@ watch(monthOffset, async () => {
   </BudgetControl>
 
   <PageSpinner v-if="isLoading" />
-  <DailyBudgetTable v-else :budgetData="budgetStore.budget" @onClick="selectBudgetItem" />
+  <DailyBudgetTable
+    v-else
+    :budgetData="budgetStore.budget"
+    :selectedBudgetItem="selectedBudgetItem"
+    @onClick="selectBudgetItem"
+  />
 
   <EditBudgetModal
     :budget="budgetStore.budget"

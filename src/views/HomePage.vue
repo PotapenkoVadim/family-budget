@@ -2,8 +2,9 @@
 import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import ReviewBudget from '@/components/ReviewBudget.vue';
-import { ANNUAL_BUDGET_COLS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
+import { ANNUAL_BUDGET_COLS, ROUTER_PATHS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
+import { useSession } from '@/store/session';
 import {
   getChartData,
   getFirstAndLastDayOfPeriod,
@@ -15,9 +16,11 @@ import {
   transformToAnnualBudget
 } from '@/utils';
 import Card from 'primevue/card';
+import Message from 'primevue/message';
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
 
+const sessionStorage = useSession();
 const budgetStore = useBudget();
 const toast = useToast();
 
@@ -38,12 +41,16 @@ const getBudget = async () => {
 };
 
 onMounted(async () => {
-  await getBudget();
+  if (sessionStorage.currentSession) {
+    await getBudget();
+  } else {
+    isLoading.value = false;
+  }
 });
 
 const data = computed(() => {
   return isMonthPanel.value
-    ? budgetStore.budget.filter((item) => isCurrentMonth(item.date))
+    ? budgetStore.budget?.filter((item) => isCurrentMonth(item.date))
     : transformToAnnualBudget(budgetStore.budget);
 });
 
@@ -70,6 +77,12 @@ const inComeText = computed(() => {
 
 <template>
   <PageTitle>Показатели бюджета</PageTitle>
+  <Message class="home__message" severity="error">
+    Необходимо
+    <router-link class="home__login-link" :to="ROUTER_PATHS.login">войти</router-link>
+    в приложение.
+  </Message>
+
   <PageSpinner v-if="isLoading" />
 
   <div v-else class="home__content">
@@ -176,6 +189,15 @@ const inComeText = computed(() => {
 .home__card_open .home__card-title {
   color: var(--accent);
   transform: rotate(0) translate(0, 0);
+}
+
+.home__message {
+  margin-top: 8px;
+}
+
+.home__login-link {
+  color: var(--p-message-error-color);
+  text-decoration: underline;
 }
 
 .v-enter-active,
