@@ -7,15 +7,11 @@ import { EMPTY_DAILY_BUDGET_TEXT } from '@/constants';
 import { addGracePeriod, toClientDate } from '@/utils';
 
 const props = defineProps({
-  budget: Array
-});
-
-const creditData = computed(() => {
-  return props.budget.filter((item) => item.is_credit);
+  budget: Object
 });
 
 const isEmpty = computed(() => {
-  return !props.budget.length;
+  return !Object.keys(props.budget)?.length;
 });
 </script>
 
@@ -32,10 +28,10 @@ const isEmpty = computed(() => {
         {{ EMPTY_DAILY_BUDGET_TEXT }}
       </BudgetTableEmpty>
 
-      <div v-for="data in creditData" :key="data.id" class="credit-table__data">
-        <BudgetTableItem>{{ toClientDate(data.date) }}</BudgetTableItem>
-        <BudgetTableItem>{{ addGracePeriod(data.date) }}</BudgetTableItem>
-        <BudgetTableItem>{{ data.sum }}</BudgetTableItem>
+      <div v-for="(sum, date) in props.budget" :key="date" class="credit-table__data">
+        <BudgetTableItem>{{ toClientDate(date) }}</BudgetTableItem>
+        <BudgetTableItem>{{ addGracePeriod(date) }}</BudgetTableItem>
+        <BudgetTableItem>{{ sum }}</BudgetTableItem>
       </div>
     </template>
   </BudgetTable>
