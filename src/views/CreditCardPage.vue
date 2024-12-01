@@ -2,9 +2,10 @@
 import CreditTable from '@/components/CreditTable.vue';
 import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
-import { ANNUAL_BUDGET_COLS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
+import { ANNUAL_BUDGET_COLS, SERVER_DATE_FORMAT, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
 import { getFirstAndLastDayOfPeriod } from '@/utils';
+import moment from 'moment';
 import Tag from 'primevue/tag';
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
@@ -54,6 +55,22 @@ const credit = computed(() => {
     return acc;
   }, 0);
 });
+
+const diff = computed(() => {
+  const incomeValue = income.value || 0;
+  const creditValue = credit.value || 0;
+
+  return Math.round((incomeValue - creditValue) * 100) / 100;
+});
+
+const creditDataByDate = computed(() => {
+  return budgetStore.budget?.reduce((acc, item) => {
+    const date = moment(item.date).startOf('month').format(SERVER_DATE_FORMAT);
+    acc[date] = (acc[date] || 0) + item.sum;
+
+    return acc;
+  }, {});
+});
 </script>
 
 <template>
@@ -61,11 +78,11 @@ const credit = computed(() => {
   <div class="credit__info">
     <Tag :value="`Отложено: ${income}`" />
     <Tag :value="`Кредитные: ${credit}`" />
-    <Tag severity="danger" :value="`Разница: ${income - credit}`" />
+    <Tag severity="danger" :value="`Разница: ${diff}`" />
   </div>
 
   <PageSpinner v-if="isLoading" />
-  <CreditTable v-else :budget="budgetStore.budget" />
+  <CreditTable v-else :budget="creditDataByDate" />
 </template>
 
 <style scoped>

@@ -1,13 +1,15 @@
 import { supabase } from '@/clients/supabase';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useSession } from './session';
 
 export const useBudget = defineStore('budget', () => {
   const sessionStorage = useSession();
-  const isDemo = sessionStorage.currentSession.profile.access_type === 'demo';
 
   const budget = ref(null);
+  const isDemo = computed(() => {
+    return sessionStorage.currentSession?.profile?.access_type === 'demo';
+  });
 
   const getBudget = async (dateRange, select = '*') => {
     const { data, error } = await supabase
@@ -15,7 +17,7 @@ export const useBudget = defineStore('budget', () => {
       .select(select)
       .lte('date', dateRange[1])
       .gte('date', dateRange[0])
-      .eq('demo', isDemo);
+      .eq('demo', isDemo.value);
 
     if (error) {
       throw new Error(error.message);
@@ -30,7 +32,7 @@ export const useBudget = defineStore('budget', () => {
       .select(select)
       .lte('date', dateRange[1])
       .gte('date', dateRange[0])
-      .eq('demo', isDemo)
+      .eq('demo', isDemo.value)
       .or('is_credit.eq.true,category.eq.income');
 
     if (error) {
@@ -46,7 +48,7 @@ export const useBudget = defineStore('budget', () => {
       .update(value)
       .eq('date', value.date)
       .eq('category', value.category)
-      .eq('demo', isDemo);
+      .eq('demo', isDemo.value);
 
     if (error) {
       throw new Error(error.message);
@@ -62,23 +64,28 @@ export const useBudget = defineStore('budget', () => {
   };
 
   const insertBudgetItem = async (value, dateRange, select = '*') => {
-    const data = { ...value, demo: isDemo };
+    const data = { ...value, demo: isDemo.value };
     let { data: budget } = await supabase
       .from('budget')
       .select('id')
       .eq('date', value.date)
       .eq('category', value.category)
-      .eq('demo', isDemo);
+      .eq('demo', isDemo.value);
 
     if (budget.length) await updateItem(data);
     else await createItem(data);
     await getBudget(dateRange, select);
   };
 
+  const resetBudget = () => {
+    budget.value = null;
+  };
+
   return {
     budget,
     getBudget,
     insertBudgetItem,
-    getCreditBudget
+    getCreditBudget,
+    resetBudget
   };
 });

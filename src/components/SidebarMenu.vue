@@ -1,5 +1,6 @@
 <script setup>
 import { ROUTER_PATHS, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
+import { useBudget } from '@/store/budget';
 import { useSession } from '@/store/session';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
@@ -8,6 +9,7 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const sessionStore = useSession();
+const budgetStore = useBudget();
 const router = useRouter();
 const toast = useToast();
 
@@ -54,6 +56,7 @@ const handleSubmit = async () => {
   isLoading.value = true;
   try {
     await sessionStore.signOut();
+    budgetStore.resetBudget();
     router.push(ROUTER_PATHS.home);
   } catch (error) {
     console.warn(error);

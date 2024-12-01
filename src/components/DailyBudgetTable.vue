@@ -12,7 +12,8 @@ import BudgetTableItem from './BudgetTableItem.vue';
 import BudgetTableEmpty from './BudgetTableEmpty.vue';
 
 const props = defineProps({
-  budgetData: Object
+  budgetData: Object,
+  selectedBudgetItem: Object
 });
 
 const tableData = computed(() => {
@@ -57,6 +58,10 @@ const totalByCategories = computed(() => {
         <BudgetTableItem
           v-for="category in CATEGORIES"
           :key="category"
+          :class="{
+            table__item_active:
+              selectedBudgetItem?.category === category && selectedBudgetItem?.date === date
+          }"
           @click="
             $emit(
               'onClick',
@@ -86,5 +91,13 @@ const totalByCategories = computed(() => {
 .table__total,
 .table__data {
   display: flex;
+}
+
+.table__item {
+  transition: 0.4s;
+}
+
+.table__item_active {
+  background-color: rgba(52, 211, 153, 0.4);
 }
 </style>

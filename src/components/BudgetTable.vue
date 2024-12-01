@@ -44,7 +44,7 @@ const props = defineProps({
   position: sticky;
   left: 0;
   background-color: var(--light-dark);
-  margin-top: 40px;
+  margin-top: 34px;
   box-shadow: 0 2px 8px var(--p-surface-700);
   height: max-content;
   z-index: 1;
