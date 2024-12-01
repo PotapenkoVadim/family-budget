@@ -122,3 +122,5 @@ export const CHART_OPTIONS = {
     }
   }
 };
+
+export const GRACE_PERIOD = 3;

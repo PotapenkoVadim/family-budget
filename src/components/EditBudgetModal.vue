@@ -130,7 +130,7 @@ watch(
         <Message v-if="!isValidSum" severity="error">Обязательное поле</Message>
       </div>
 
-      <div>
+      <div v-if="category.code !== 'income'">
         <Checkbox class="modal__checkbox" inputId="is_credit" v-model="isCredit" binary />
         <label class="modal__label" for="is_credit">Оплата кредитной картой</label>
       </div>

@@ -5,6 +5,7 @@ import {
   CHART_COLORS_HOVER,
   CLIENT_DATE_FORMAT,
   DASH_CHAR,
+  GRACE_PERIOD,
   MONTHS,
   SERVER_DATE_FORMAT
 } from './constants';
@@ -211,4 +212,8 @@ export const transformToAnnualBudget = (budget) => {
     ...item,
     category: categoryMap[item.category] || item.category
   }));
+};
+
+export const addGracePeriod = (date) => {
+  return moment(date).add(GRACE_PERIOD, 'month').endOf('month').format(CLIENT_DATE_FORMAT);
 };

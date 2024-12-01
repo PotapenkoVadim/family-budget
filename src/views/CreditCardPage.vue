@@ -7,7 +7,7 @@ import { useBudget } from '@/store/budget';
 import { getFirstAndLastDayOfPeriod } from '@/utils';
 import Tag from 'primevue/tag';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const budgetStore = useBudget();
 const toast = useToast();
@@ -30,18 +30,42 @@ const getBudget = async () => {
 onMounted(async () => {
   await getBudget();
 });
+
+const income = computed(() => {
+  if (!budgetStore.budget) return 0;
+
+  return budgetStore.budget.reduce((acc, item) => {
+    if (item.category === 'income') {
+      acc += item.sum;
+    }
+
+    return acc;
+  }, 0);
+});
+
+const credit = computed(() => {
+  if (!budgetStore.budget) return 0;
+
+  return budgetStore.budget.reduce((acc, item) => {
+    if (item.is_credit) {
+      acc += item.sum;
+    }
+
+    return acc;
+  }, 0);
+});
 </script>
 
 <template>
   <PageTitle>Расходы по кредитной карте</PageTitle>
   <div class="credit__info">
-    <Tag value="Отложено: 2" />
-    <Tag value="Кредитные: 200" />
-    <Tag severity="danger" value="Разница: 200" />
+    <Tag :value="`Отложено: ${income}`" />
+    <Tag :value="`Кредитные: ${credit}`" />
+    <Tag severity="danger" :value="`Разница: ${income - credit}`" />
   </div>
 
   <PageSpinner v-if="isLoading" />
-  <CreditTable v-else />
+  <CreditTable v-else :budget="budgetStore.budget" />
 </template>
 
 <style scoped>
