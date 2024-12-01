@@ -77,7 +77,7 @@ const inComeText = computed(() => {
 
 <template>
   <PageTitle>Показатели бюджета</PageTitle>
-  <Message class="home__message" severity="error">
+  <Message v-if="!sessionStorage.currentSession" class="home__message" severity="error">
     Необходимо
     <router-link class="home__login-link" :to="ROUTER_PATHS.login">войти</router-link>
     в приложение.
