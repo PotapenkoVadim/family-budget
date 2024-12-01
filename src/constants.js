@@ -1,5 +1,5 @@
 export const ROUTER_PATHS = {
-  home: '/family-budget',
+  home: '/family-budget/',
   daily: '/family-budget/daily',
   annual: '/family-budget/annual',
   login: '/family-budget/login',
