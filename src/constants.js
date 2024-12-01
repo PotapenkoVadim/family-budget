@@ -1,9 +1,9 @@
 export const ROUTER_PATHS = {
-  home: '/',
-  daily: '/daily',
-  annual: '/annual',
-  login: '/login',
-  card: '/card'
+  home: '/family-budget',
+  daily: '/family-budget/daily',
+  annual: '/family-budget/annual',
+  login: '/family-budget/login',
+  card: '/family-budget/card'
 };
 
 export const SERVER_DATE_FORMAT = 'YYYY-MM-DD';
