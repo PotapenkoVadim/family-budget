@@ -29,3 +29,12 @@ body {
   background-color: var(--main-dark);
   color: var(--white);
 }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
