@@ -229,5 +229,10 @@ const inComeText = computed(() => {
     flex-direction: column;
     gap: 14px;
   }
+
+  .v-enter-active,
+  .v-leave-active {
+    transition: none;
+  }
 }
 </style>
