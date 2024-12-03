@@ -13,7 +13,7 @@ const isOpenMobileMenu = ref(false);
 </script>
 
 <template>
-  <div class="layout">
+  <div :class="['layout', { layout_lock: isOpenMobileMenu }]">
     <aside :class="{ layout__sidebar: true, layout__sidebar_open: isOpenMobileMenu }">
       <div class="layout__title">Family Budget</div>
       <MenuSkeleton v-if="props.isLoading" />
@@ -44,6 +44,10 @@ const isOpenMobileMenu = ref(false);
   display: grid;
   gap: 12px;
   grid-template-columns: auto 1fr;
+}
+
+.layout_lock {
+  overflow: hidden;
 }
 
 .layout__sidebar {
@@ -77,6 +81,7 @@ const isOpenMobileMenu = ref(false);
   right: 0;
   display: none;
   margin-left: auto;
+  z-index: 999;
 }
 
 @media (max-width: 1025px) {
@@ -92,7 +97,6 @@ const isOpenMobileMenu = ref(false);
     position: fixed;
     left: 0;
     top: 0;
-    overflow: hidden;
     z-index: 999;
     transition: 0.45s;
     transform: translateX(-100%);
@@ -111,6 +115,20 @@ const isOpenMobileMenu = ref(false);
 @media (max-width: 600px) {
   .layout__content {
     padding: 10px;
+  }
+
+  .layout__sidebar_open::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    animation: fade-in 2s;
   }
 }
 </style>
