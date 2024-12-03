@@ -13,7 +13,7 @@ const isOpenMobileMenu = ref(false);
 </script>
 
 <template>
-  <div class="layout">
+  <div :class="['layout', { layout_lock: isOpenMobileMenu }]">
     <aside :class="{ layout__sidebar: true, layout__sidebar_open: isOpenMobileMenu }">
       <div class="layout__title">Family Budget</div>
       <MenuSkeleton v-if="props.isLoading" />
@@ -44,6 +44,10 @@ const isOpenMobileMenu = ref(false);
   display: grid;
   gap: 12px;
   grid-template-columns: auto 1fr;
+}
+
+.layout_lock {
+  overflow: hidden;
 }
 
 .layout__sidebar {
