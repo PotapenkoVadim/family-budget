@@ -8,5 +8,6 @@
 .page-title {
   font-size: 1.45rem;
   color: var(--white);
+  margin-right: 24px;
 }
 </style>

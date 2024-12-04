@@ -5,7 +5,8 @@ import {
   calculateDailyResultByCategory,
   calculateDailyResultByDay,
   groupBudgetByCategory,
-  toClientDate
+  toClientDate,
+  toRoundNumber
 } from '@/utils';
 import { computed } from 'vue';
 import BudgetTableItem from './BudgetTableItem.vue';
@@ -74,7 +75,7 @@ const totalByCategories = computed(() => {
           {{ tableData[date][category]?.reduce((acc, i) => (acc += i.sum), 0) || DASH_CHAR }}
         </BudgetTableItem>
         <BudgetTableItem isTotal>
-          {{ calculateDailyResultByDay(tableData[date]) }}
+          {{ toRoundNumber(calculateDailyResultByDay(tableData[date])) }}
         </BudgetTableItem>
       </div>
 

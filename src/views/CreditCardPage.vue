@@ -4,7 +4,7 @@ import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { ANNUAL_BUDGET_COLS, SERVER_DATE_FORMAT, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
-import { getFirstAndLastDayOfPeriod } from '@/utils';
+import { getFirstAndLastDayOfPeriod, toRoundNumber } from '@/utils';
 import moment from 'moment';
 import Tag from 'primevue/tag';
 import { useToast } from 'primevue/usetoast';
@@ -60,7 +60,7 @@ const diff = computed(() => {
   const incomeValue = income.value || 0;
   const creditValue = credit.value || 0;
 
-  return Math.round((incomeValue - creditValue) * 100) / 100;
+  return toRoundNumber(incomeValue - creditValue);
 });
 
 const creditDataByDate = computed(() => {
@@ -76,8 +76,8 @@ const creditDataByDate = computed(() => {
 <template>
   <PageTitle>Расходы по кредитной карте</PageTitle>
   <div class="credit__info">
-    <Tag :value="`Отложено: ${income}`" />
-    <Tag :value="`Кредитные: ${credit}`" />
+    <Tag :value="`Отложено: ${toRoundNumber(income)}`" />
+    <Tag :value="`Кредитные: ${toRoundNumber(credit)}`" />
     <Tag severity="danger" :value="`Разница: ${diff}`" />
   </div>
 
@@ -91,5 +91,12 @@ const creditDataByDate = computed(() => {
   align-items: center;
   gap: 8px;
   margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .credit__info {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 </style>

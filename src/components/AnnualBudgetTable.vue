@@ -13,7 +13,8 @@ import {
   calculateAnnualResultByCategories,
   calculateAnnualResultByMonth,
   getAnnualTotal,
-  getAnnualTotalByCategory
+  getAnnualTotalByCategory,
+  toRoundNumber
 } from '@/utils';
 import BudgetTableEmpty from './BudgetTableEmpty.vue';
 
@@ -62,7 +63,7 @@ const totalByCategories = computed(() => {
           {{ getAnnualTotalByCategory(item, category) || DASH_CHAR }}
         </BudgetTableItem>
         <BudgetTableItem isTotal>
-          {{ calculateAnnualResultByMonth(tableData[index]) }}
+          {{ toRoundNumber(calculateAnnualResultByMonth(tableData[index])) }}
         </BudgetTableItem>
       </div>
 

@@ -7,6 +7,7 @@ import {
   DASH_CHAR,
   GRACE_PERIOD,
   MONTHS,
+  NON_SPEND_CATEGORIES,
   SERVER_DATE_FORMAT
 } from './constants';
 
@@ -69,7 +70,13 @@ export const toServerDate = (date) => moment(date).format(SERVER_DATE_FORMAT);
 export const toClientDate = (date) => moment(date).format(CLIENT_DATE_FORMAT);
 
 export const calculateDailyResultByDay = (data) => {
-  return Object.values(data).reduce((acc, item) => (acc += item[0].sum), 0);
+  return Object.values(data).reduce((acc, [{ category, sum }]) => {
+    if (category !== 'income' && category !== 'deposit') {
+      acc += sum;
+    }
+
+    return acc;
+  }, 0);
 };
 
 export const calculateDailyResultByCategory = (data) => {
@@ -100,30 +107,31 @@ export const getAnnualTotal = (data) => {
 };
 
 export const getAnnualTotalByCategory = (data, category) => {
-  switch (category) {
-    case 'income':
-      return data.income;
-    case 'costs':
-      return data.costs;
-    case 'meal':
-      return (data.meal || 0) + (data.meat || 0);
-    case 'entertainment':
-      return data.restaurant;
-    case 'household':
-      return (data.household || 0) + (data.pets || 0);
-    case 'health':
-      return data.health;
-    case 'other':
-      return data.other;
-    case 'deposit':
-      return data.deposit;
-  }
+  const categoryCalculations = {
+    income: () => data.income,
+    costs: () => (data.costs || 0) + (data.clothes || 0),
+    meal: () => (data.meal || 0) + (data.meat || 0),
+    entertainment: () => data.restaurant,
+    household: () =>
+      (data.household || 0) +
+      (data.pets || 0) +
+      (data.communal || 0) +
+      (data.internet || 0) +
+      (data.apartments || 0),
+    health: () => data.health,
+    other: () => data.other,
+    deposit: () => data.deposit
+  };
+
+  return categoryCalculations[category] ? categoryCalculations[category]() : 0;
 };
 
 export const calculateAnnualResultByMonth = (data) => {
   if (!data) return DASH_CHAR;
 
-  return Object.values(data).reduce((acc, item) => (acc += item), 0);
+  return Object.entries(data)
+    .filter(([category]) => !NON_SPEND_CATEGORIES.includes(category))
+    .reduce((acc, [, sum]) => (acc += sum), 0);
 };
 
 export const calculateAnnualResultByCategories = (data) => {
@@ -217,3 +225,5 @@ export const transformToAnnualBudget = (budget) => {
 export const addGracePeriod = (date) => {
   return moment(date).add(GRACE_PERIOD, 'month').endOf('month').format(CLIENT_DATE_FORMAT);
 };
+
+export const toRoundNumber = (num) => Math.round(num * 100) / 100;
