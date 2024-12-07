@@ -169,7 +169,9 @@ export const getChartData = (budget) => {
 export const getMostSpend = (budget) => {
   if (!budget || !budget.length) return DASH_CHAR;
 
-  const { date, category, sum } = budget.sort((a, b) => b.sum - a.sum)[0];
+  const { date, category, sum } = budget
+    .filter((item) => !NON_SPEND_CATEGORIES.includes(item.category))
+    .sort((a, b) => b.sum - a.sum)[0];
 
   return `${toClientDate(date)} ${CATEGORIES_DIC[category]} - ${toRoundNumber(sum)}₽`;
 };
@@ -177,11 +179,13 @@ export const getMostSpend = (budget) => {
 export const getMostSpendCategory = (budget) => {
   if (!budget || !budget.length) return DASH_CHAR;
 
-  const value = budget.reduce((acc, { category, sum }) => {
-    acc[category] = (acc[category] || 0) + sum;
+  const value = budget
+    .filter((item) => !NON_SPEND_CATEGORIES.includes(item.category))
+    .reduce((acc, { category, sum }) => {
+      acc[category] = (acc[category] || 0) + sum;
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 
   const maxEntry = Object.entries(value).reduce((max, current) => {
     return current[1] > max[1] ? current : max;
