@@ -122,7 +122,7 @@ export const CHART_COLORS_HOVER = [
   '#80060E',
   '#E9EE8E',
   '#1C4C6A',
-  '#709CB&',
+  '#709CB7',
   '#EE4043',
   '#483098',
   '#21181E',
