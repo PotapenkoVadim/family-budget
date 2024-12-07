@@ -1,5 +1,5 @@
 <script setup>
-import { CATEGORIES_DIC } from '@/constants';
+import { CATEGORIES_DIC, NON_SPEND_CATEGORIES } from '@/constants';
 import { toServerDate } from '@/utils';
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
@@ -34,7 +34,7 @@ const categories = Object.keys(CATEGORIES_DIC).map((key) => ({
 
 const validate = () => {
   isValidDate.value = Boolean(date.value);
-  isValidSum.value = Boolean(sum.value);
+  isValidSum.value = Boolean(sum.value) || sum.value === 0;
   isValidCategory.value = Boolean(category.value);
 
   return isValidDate.value && isValidSum.value && isValidCategory.value;
@@ -130,7 +130,7 @@ watch(
         <Message v-if="!isValidSum" severity="error">Обязательное поле</Message>
       </div>
 
-      <div v-if="category?.code !== 'income'">
+      <div v-if="!NON_SPEND_CATEGORIES.includes(category?.code)">
         <Checkbox class="modal__checkbox" inputId="is_credit" v-model="isCredit" binary />
         <label class="modal__label" for="is_credit">Оплата кредитной картой</label>
       </div>

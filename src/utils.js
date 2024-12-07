@@ -8,7 +8,8 @@ import {
   GRACE_PERIOD,
   MONTHS,
   NON_SPEND_CATEGORIES,
-  SERVER_DATE_FORMAT
+  SERVER_DATE_FORMAT,
+  UNION_TOTAL_CATEGORIES_MAP
 } from './constants';
 
 export const getFirstAndLastDayOfPeriod = (offset, period) => {
@@ -109,17 +110,13 @@ export const getAnnualTotal = (data) => {
 export const getAnnualTotalByCategory = (data, category) => {
   const categoryCalculations = {
     income: () => data.income,
-    costs: () => (data.costs || 0) + (data.clothes || 0),
+    costs: () =>
+      (data.costs || 0) + (data.communal || 0) + (data.internet || 0) + (data.apartments || 0),
     meal: () => (data.meal || 0) + (data.meat || 0),
     entertainment: () => data.restaurant,
-    household: () =>
-      (data.household || 0) +
-      (data.pets || 0) +
-      (data.communal || 0) +
-      (data.internet || 0) +
-      (data.apartments || 0),
+    household: () => (data.household || 0) + (data.pets || 0),
     health: () => data.health,
-    other: () => data.other,
+    other: () => (data.other || 0) + (data.clothes || 0),
     deposit: () => data.deposit
   };
 
@@ -137,7 +134,8 @@ export const calculateAnnualResultByMonth = (data) => {
 export const calculateAnnualResultByCategories = (data) => {
   return data.reduce((acc, item) => {
     for (let key in item) {
-      acc[key] = (acc[key] || 0) + item[key];
+      const category = UNION_TOTAL_CATEGORIES_MAP[key];
+      acc[category] = toRoundNumber((acc[category] || 0) + item[key]);
     }
 
     return acc;
@@ -148,7 +146,9 @@ export const getChartData = (budget) => {
   if (!budget || !budget.length) return {};
 
   const values = budget.reduce((acc, { category, sum }) => {
-    acc[CATEGORIES_DIC[category]] = (acc[CATEGORIES_DIC[category]] || 0) + sum;
+    if (!NON_SPEND_CATEGORIES.includes(category)) {
+      acc[CATEGORIES_DIC[category]] = (acc[CATEGORIES_DIC[category]] || 0) + sum;
+    }
 
     return acc;
   }, {});
