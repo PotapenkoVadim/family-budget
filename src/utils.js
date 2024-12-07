@@ -171,7 +171,7 @@ export const getMostSpend = (budget) => {
 
   const { date, category, sum } = budget.sort((a, b) => b.sum - a.sum)[0];
 
-  return `${toClientDate(date)} ${CATEGORIES_DIC[category]} - ${sum}₽`;
+  return `${toClientDate(date)} ${CATEGORIES_DIC[category]} - ${toRoundNumber(sum)}₽`;
 };
 
 export const getMostSpendCategory = (budget) => {
@@ -187,7 +187,7 @@ export const getMostSpendCategory = (budget) => {
     return current[1] > max[1] ? current : max;
   });
 
-  return `${CATEGORIES_DIC[maxEntry[0]]} - ${maxEntry[1]}₽`;
+  return `${CATEGORIES_DIC[maxEntry[0]]} - ${toRoundNumber(maxEntry[1])}₽`;
 };
 
 export const getMaxSpend = (budget) => {
@@ -195,7 +195,7 @@ export const getMaxSpend = (budget) => {
 
   const value = budget.reduce((acc, { sum }) => (acc += sum), 0);
 
-  return `${value}₽`;
+  return `${toRoundNumber(value)}₽`;
 };
 
 export const getInCome = (budget) => {
@@ -207,7 +207,7 @@ export const getInCome = (budget) => {
     return acc;
   }, 0);
 
-  return `${value}₽`;
+  return `${toRoundNumber(value)}₽`;
 };
 
 export const transformToAnnualBudget = (budget) => {
