@@ -79,6 +79,23 @@ export const TOTAL_CATEGORIES = [
   'deposit'
 ];
 
+export const UNION_TOTAL_CATEGORIES_MAP = {
+  income: 'income',
+  costs: 'costs',
+  communal: 'costs',
+  internet: 'costs',
+  apartments: 'costs',
+  meal: 'meal',
+  meat: 'meal',
+  household: 'household',
+  pets: 'household',
+  health: 'health',
+  other: 'other',
+  clothes: 'other',
+  deposit: 'deposit',
+  restaurant: 'entertainment'
+};
+
 export const EMPTY_DAILY_BUDGET_TEXT = 'Данные за этот месяц отсутствуют';
 export const EMPTY_ANNUAL_BUDGET_TEXT = 'Данные за этот год отсутствуют';
 

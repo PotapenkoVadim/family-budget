@@ -36,7 +36,7 @@ const income = computed(() => {
   if (!budgetStore.budget) return 0;
 
   return budgetStore.budget.reduce((acc, item) => {
-    if (item.category === 'income') {
+    if (item.category === 'deposit') {
       acc += item.sum;
     }
 
@@ -65,8 +65,10 @@ const diff = computed(() => {
 
 const creditDataByDate = computed(() => {
   return budgetStore.budget?.reduce((acc, item) => {
-    const date = moment(item.date).startOf('month').format(SERVER_DATE_FORMAT);
-    acc[date] = (acc[date] || 0) + item.sum;
+    if (item.category !== 'deposit') {
+      const date = moment(item.date).startOf('month').format(SERVER_DATE_FORMAT);
+      acc[date] = (acc[date] || 0) + item.sum;
+    }
 
     return acc;
   }, {});
@@ -77,8 +79,8 @@ const creditDataByDate = computed(() => {
   <PageTitle>Расходы по кредитной карте</PageTitle>
   <div class="credit__info">
     <Tag :value="`Отложено: ${toRoundNumber(income)}`" />
-    <Tag :value="`Кредитные: ${toRoundNumber(credit)}`" />
-    <Tag severity="danger" :value="`Разница: ${diff}`" />
+    <Tag severity="danger" :value="`Кредитные: ${toRoundNumber(credit)}`" />
+    <Tag :value="`Разница: ${diff}`" />
   </div>
 
   <PageSpinner v-if="isLoading" />
