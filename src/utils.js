@@ -197,7 +197,9 @@ export const getMostSpendCategory = (budget) => {
 export const getMaxSpend = (budget) => {
   if (!budget || !budget.length) return DASH_CHAR;
 
-  const value = budget.reduce((acc, { sum }) => (acc += sum), 0);
+  const value = budget
+    .filter((item) => !NON_SPEND_CATEGORIES.includes(item.category))
+    .reduce((acc, { sum }) => (acc += sum), 0);
 
   return `${toRoundNumber(value)}₽`;
 };

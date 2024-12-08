@@ -77,14 +77,17 @@ const creditDataByDate = computed(() => {
 
 <template>
   <PageTitle>Расходы по кредитной карте</PageTitle>
-  <div class="credit__info">
-    <Tag :value="`Отложено: ${toRoundNumber(income)}`" />
-    <Tag severity="danger" :value="`Кредитные: ${toRoundNumber(credit)}`" />
-    <Tag :value="`Разница: ${diff}`" />
-  </div>
-
   <PageSpinner v-if="isLoading" />
-  <CreditTable v-else :budget="creditDataByDate" />
+
+  <template v-else>
+    <div class="credit__info">
+      <Tag :value="`Отложено: ${toRoundNumber(income)}`" />
+      <Tag severity="danger" :value="`Кредитные: ${toRoundNumber(credit)}`" />
+      <Tag :value="`Разница: ${diff}`" />
+    </div>
+
+    <CreditTable :budget="creditDataByDate" />
+  </template>
 </template>
 
 <style scoped>
