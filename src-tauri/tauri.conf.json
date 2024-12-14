@@ -1,11 +1,11 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "family-budget",
-  "version": "0.1.0",
-  "identifier": "family-budget",
+  "version": "1.0.0",
+  "identifier": "family-budget.app",
   "build": {
     "beforeDevCommand": "yarn dev",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://localhost:1420/family-budget",
     "beforeBuildCommand": "yarn build",
     "frontendDist": "../dist"
   },
@@ -31,6 +31,9 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "android": {
+      "minSdkVersion": 24
+    }
   }
 }

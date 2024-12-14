@@ -229,7 +229,16 @@ export const transformToAnnualBudget = (budget) => {
 };
 
 export const addGracePeriod = (date) => {
-  return moment(date).add(GRACE_PERIOD, 'month').endOf('month').format(CLIENT_DATE_FORMAT);
+  const value = moment(date).add(GRACE_PERIOD, 'month').endOf('month');
+
+  return renderCreditDate(value.month(), value.year());
 };
+
+export const getCreditDate = (date) => {
+  const value = new Date(date);
+
+  return renderCreditDate(value.getMonth(), value.getFullYear());
+};
+export const renderCreditDate = (month, year) => `${MONTHS[month]} ${year}`;
 
 export const toRoundNumber = (num) => Math.round(num * 100) / 100;
