@@ -4,7 +4,7 @@ import BudgetTable from './BudgetTable.vue';
 import BudgetTableItem from './BudgetTableItem.vue';
 import BudgetTableEmpty from './BudgetTableEmpty.vue';
 import { EMPTY_DAILY_BUDGET_TEXT } from '@/constants';
-import { addGracePeriod, toClientDate } from '@/utils';
+import { addGracePeriod, getCreditDate } from '@/utils';
 
 const props = defineProps({
   budget: Object
@@ -18,8 +18,8 @@ const isEmpty = computed(() => {
 <template>
   <BudgetTable :className="'credit-table'">
     <template v-slot:header>
-      <BudgetTableItem>Дата покупки</BudgetTableItem>
-      <BudgetTableItem>Дата возврата</BudgetTableItem>
+      <BudgetTableItem>Покупка</BudgetTableItem>
+      <BudgetTableItem>Возврат</BudgetTableItem>
       <BudgetTableItem>Сумма</BudgetTableItem>
     </template>
 
@@ -29,7 +29,7 @@ const isEmpty = computed(() => {
       </BudgetTableEmpty>
 
       <div v-for="(sum, date) in props.budget" :key="date" class="credit-table__data">
-        <BudgetTableItem>{{ toClientDate(date) }}</BudgetTableItem>
+        <BudgetTableItem>{{ getCreditDate(date) }}</BudgetTableItem>
         <BudgetTableItem>{{ addGracePeriod(date) }}</BudgetTableItem>
         <BudgetTableItem>{{ sum }}</BudgetTableItem>
       </div>

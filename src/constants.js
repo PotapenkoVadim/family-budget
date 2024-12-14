@@ -140,6 +140,6 @@ export const CHART_OPTIONS = {
   }
 };
 
-export const GRACE_PERIOD = 3;
+export const GRACE_PERIOD = 4;
 
 export const NON_SPEND_CATEGORIES = ['income', 'deposit'];
