@@ -1,5 +1,5 @@
 # Family Budget App
-##### Версия: 1.0.0
+##### Версия: 1.1.0
 ##### Платформа: Web/Android/Desktop
 ##### Технологии:
 - Frontend: Vue, Pinia, VueRouter
