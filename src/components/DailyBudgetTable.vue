@@ -4,6 +4,7 @@ import { CATEGORIES, CATEGORIES_DIC, DASH_CHAR, EMPTY_DAILY_BUDGET_TEXT } from '
 import {
   calculateDailyResultByCategory,
   calculateDailyResultByDay,
+  getComment,
   groupBudgetByCategory,
   toClientDate,
   toRoundNumber
@@ -59,6 +60,7 @@ const totalByCategories = computed(() => {
         <BudgetTableItem
           v-for="category in CATEGORIES"
           :key="category"
+          v-bind:data-comment="getComment(tableData[date][category])"
           :class="{
             table__item_active:
               selectedBudgetItem?.category === category && selectedBudgetItem?.date === date
@@ -95,7 +97,37 @@ const totalByCategories = computed(() => {
 }
 
 .table__item {
+  position: relative;
   transition: 0.4s;
+  cursor: pointer;
+}
+
+.table__item[data-comment]:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16%;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--p-surface-600);
+  z-index: 999;
+}
+
+.table__item[data-comment]:hover::before {
+  content: attr(data-comment);
+  position: absolute;
+  top: -70%;
+  left: 10%;
+  padding: 2px 24px;
+  border-radius: 4px;
+  border: none;
+  background-color: var(--p-surface-600);
+  color: var(--white);
+  width: max-content;
+  z-index: 999;
+  box-shadow: 1px 1px 1px var(--white);
 }
 
 .table__item_active {

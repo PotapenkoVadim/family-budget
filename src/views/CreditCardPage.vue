@@ -4,7 +4,7 @@ import PageSpinner from '@/components/PageSpinner.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { ANNUAL_BUDGET_COLS, SERVER_DATE_FORMAT, TOAST_DEFAULT_ERROR_MESSAGE } from '@/constants';
 import { useBudget } from '@/store/budget';
-import { getFirstAndLastDayOfPeriod, toRoundNumber } from '@/utils';
+import { getPeriodWithYearOffset, toRoundNumber } from '@/utils';
 import moment from 'moment';
 import Tag from 'primevue/tag';
 import { useToast } from 'primevue/usetoast';
@@ -18,7 +18,7 @@ const isLoading = ref(true);
 const getBudget = async () => {
   isLoading.value = true;
   try {
-    const period = getFirstAndLastDayOfPeriod(0, 'year');
+    const period = getPeriodWithYearOffset();
     await budgetStore.getCreditBudget(period, ANNUAL_BUDGET_COLS);
   } catch (error) {
     console.warn(error);

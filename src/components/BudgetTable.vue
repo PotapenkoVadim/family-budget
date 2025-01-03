@@ -47,7 +47,7 @@ const props = defineProps({
   margin-top: 34px;
   box-shadow: 0 2px 8px var(--p-surface-700);
   height: max-content;
-  z-index: 1;
+  z-index: 3;
 }
 
 .table__header {
@@ -56,6 +56,7 @@ const props = defineProps({
   top: 0;
   background-color: var(--light-dark);
   box-shadow: 2px 0 8px var(--p-surface-700);
+  z-index: 2;
 }
 
 @media (max-width: 1025px) {

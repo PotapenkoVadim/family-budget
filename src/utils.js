@@ -12,6 +12,14 @@ import {
   UNION_TOTAL_CATEGORIES_MAP
 } from './constants';
 
+export const getPeriodWithYearOffset = () => {
+  const yearOffset = moment().add(-1, 'year');
+  const start = toServerDate(yearOffset);
+  const end = toServerDate(moment());
+
+  return [start, end];
+};
+
 export const getFirstAndLastDayOfPeriod = (offset, period) => {
   const currentDate = moment().add(offset, period);
   const start = toServerDate(currentDate.startOf(period));
@@ -239,6 +247,11 @@ export const getCreditDate = (date) => {
 
   return renderCreditDate(value.getMonth(), value.getFullYear());
 };
-export const renderCreditDate = (month, year) => `${MONTHS[month]} ${year}`;
 
+export const renderCreditDate = (month, year) => `${MONTHS[month]} ${year}`;
 export const toRoundNumber = (num) => Math.round(num * 100) / 100;
+export const getComment = (budgetItem) => {
+  if (!budgetItem) return;
+
+  return budgetItem[0].comment;
+};
